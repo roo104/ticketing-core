@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+
+---
+spring:
+  profiles: bamboo
+
+  datasource:
+    url: jdbc:mysql://dkost-s-sql-001.unwire.com:3306/ticketing_core_ci_test?autoReconnect=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: bamboo_flyway
+    password: HtF9q52UgufA8wns
+
+---
+spring:
+  profiles: default
+
+  datasource:
+    url: jdbc:mysql://database.mticket.unwire.io:3306/ticketing_core_ci_test?autoReconnect=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: mticket
+    password: mticket
+
+---
+spring:
+  profiles: server
+
+  datasource:
+    jndi-name: java:jboss/ticketing_core
+
+---
+spring:
+  profiles: server-local
+
+  datasource:
+    jndi-name: java:jboss/ticketing_core
+
+
+
