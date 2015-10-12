@@ -1,0 +1,71 @@
+### Windows ###
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+ 
+# Folder config file
+Desktop.ini
+ 
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+ 
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+ 
+### Server files ###
+src/main/docker/unwire_lib
+src/main/docker/unwire_deploy
+
+# Thumbnails
+._*
+ 
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+ 
+### Maven ###
+target/
+dist/
+*.versionsBackup
+*.branch
+ 
+### Eclipse/IntelliJ ###
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+.pmd
+*.iml
+.idea
+rebel.xml
+rebel-remote.xml
+ 
+# External tool builders
+.externalToolBuilders/
+ 
+# Locally stored "Eclipse launch configurations"
+*.launch
+ 
+# CDT-specific
+.cproject
+ 
+# PDT-specific
+.buildpath
+
+## Logs, Diffs, etc ##
+*.log
+*.log.*
+*.diff
