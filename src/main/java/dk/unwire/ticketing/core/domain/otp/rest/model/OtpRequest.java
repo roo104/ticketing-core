@@ -7,11 +7,12 @@ public class OtpRequest {
     @NotNull
     private Long msisdn;
 
-    public OtpRequest() {
-    }
-
     public void setMsisdn(Long msisdn) {
         this.msisdn = msisdn;
+    }
+
+    public Long getMsisdn() {
+        return this.msisdn;
     }
 }
 
