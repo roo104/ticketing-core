@@ -3,7 +3,7 @@ package dk.unwire.ticketing.core.domain.otp.service.model;
 import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperty;
 
-public class IvsRequestOtpVO {
+public final class IvsRequestOtpVO {
     private final Application application;
     private final long msisdn;
     private final SystemProperty systemProperty;

@@ -30,9 +30,7 @@ public class OtpService {
         String url = String.format("%s/context/%d/validation/identity/%d", ivsRequestOtpVO.getSystemProperty().getValue(), ivsContextId, ivsRequestOtpVO.getMsisdn());
         IvsRequestOtp ivsRequestOTP = new IvsRequestOtp(ivsMessageText, ivsSenderName);
 
-        ResponseEntity<IvsResponseOtp> response = executeRequest(ivsRequestOTP, url);
-
-        return response;
+        return executeRequest(ivsRequestOTP, url);
 
     }
 
@@ -52,11 +50,7 @@ public class OtpService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity entity = new HttpEntity(ivsRequestOTP, headers);
-        ResponseEntity<IvsResponseOtp> response = null;
 
-        response = restTemplate.exchange(url, HttpMethod.POST, entity, IvsResponseOtp.class);
-
-
-        return response;
+        return restTemplate.exchange(url, HttpMethod.POST, entity, IvsResponseOtp.class);
     }
 }

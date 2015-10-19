@@ -28,4 +28,12 @@ public class SystemProperty {
     public String getValue() {
         return this.value;
     }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
 }

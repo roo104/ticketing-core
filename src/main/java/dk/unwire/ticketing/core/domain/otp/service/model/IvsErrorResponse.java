@@ -21,4 +21,11 @@ public class IvsErrorResponse{
         return this.message;
     }
 
+    public int getErrorCode() {
+        return this.errorCode;
+    }
+
+    public int getSecondBeforeRetry() {
+        return this.secondBeforeRetry;
+    }
 }

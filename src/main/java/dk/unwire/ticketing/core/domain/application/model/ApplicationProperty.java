@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name= "application_property")
+@Table(name = "application_property")
 public class ApplicationProperty {
     @Id
     @Column(name = "id")
@@ -15,6 +15,10 @@ public class ApplicationProperty {
     private String name;
     @Column(name = "value")
     private String value;
+
+    public int getId() {
+        return this.id;
+    }
 
     public String getValue() {
         return this.value;

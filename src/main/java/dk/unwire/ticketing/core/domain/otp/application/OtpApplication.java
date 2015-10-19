@@ -4,20 +4,17 @@ import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.application.service.ApplicationService;
 import dk.unwire.ticketing.core.domain.otp.rest.model.OtpRequestVO;
 import dk.unwire.ticketing.core.domain.otp.service.OtpService;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
+import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
 import dk.unwire.ticketing.core.domain.systemproperty.enums.SystemPropertyEnum;
 import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperty;
 import dk.unwire.ticketing.core.domain.systemproperty.service.SystemPropertyService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OtpApplication {
-    private static final Logger logger = LoggerFactory.getLogger(OtpApplication.class);
     @Autowired
     private ApplicationService applicationService;
     @Autowired

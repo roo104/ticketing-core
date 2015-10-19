@@ -100,6 +100,110 @@ public class Application {
         this.applicationProperties = new HashMap<>();
     }
 
+    public long getShortcode() {
+        return this.shortcode;
+    }
+
+    public String getTestPattern() {
+        return this.testPattern;
+    }
+
+    public String getControlPattern() {
+        return this.controlPattern;
+    }
+
+    public String getVerificationPattern() {
+        return this.verificationPattern;
+    }
+
+    public Integer getCountryId() {
+        return this.countryId;
+    }
+
+    public Integer getTtlMinMo() {
+        return this.ttlMinMo;
+    }
+
+    public Integer getTtlMinMt() {
+        return this.ttlMinMt;
+    }
+
+    public Integer getVerificationTimeout() {
+        return this.verificationTimeout;
+    }
+
+    public String getVat() {
+        return this.vat;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public String getGwUsername() {
+        return this.gwUsername;
+    }
+
+    public String getGwPassword() {
+        return this.gwPassword;
+    }
+
+    public String getTestMediacode() {
+        return this.testMediacode;
+    }
+
+    public String getShortcodePrefix() {
+        return this.shortcodePrefix;
+    }
+
+    public Integer getGwValidityMin() {
+        return this.gwValidityMin;
+    }
+
+    public Integer getShortcodeId() {
+        return this.shortcodeId;
+    }
+
+    public String getActionPattern() {
+        return this.actionPattern;
+    }
+
+    public Byte getReminderEnabled() {
+        return this.reminderEnabled;
+    }
+
+    public Integer getBuyTicketType() {
+        return this.buyTicketType;
+    }
+
+    public Integer getApplicationType() {
+        return this.applicationType;
+    }
+
+    public String getTimeZone() {
+        return this.timeZone;
+    }
+
+    public Byte getDeleted() {
+        return this.deleted;
+    }
+
+    public int getParent() {
+        return this.parent;
+    }
+
+    public String getSerialcodePrefix() {
+        return this.serialcodePrefix;
+    }
+
+    public String getAccountSource() {
+        return this.accountSource;
+    }
+
+    public Map<String, ApplicationProperty> getApplicationProperties() {
+        return this.applicationProperties;
+    }
+
     public int getId() {
         return this.id;
     }
