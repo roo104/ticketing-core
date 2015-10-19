@@ -1,8 +1,8 @@
 package dk.unwire.ticketing.core.domain.otp.service.model;
 
-public class IvsRequestOtp {
-    String message;
-    SenderVO sender;
+public final class IvsRequestOtp {
+    private final String message;
+    private final SenderVO sender;
 
     public IvsRequestOtp(String message, String sender) {
         this.message = message;
@@ -18,8 +18,8 @@ public class IvsRequestOtp {
         return this.sender;
     }
 
-    private class SenderVO {
-        String name;
+    private final class SenderVO {
+        private final String name;
 
         public SenderVO(String name) {
             this.name = name;

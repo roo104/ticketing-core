@@ -3,8 +3,8 @@ package dk.unwire.ticketing.core.domain.otp.service;
 import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationPropertyException;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtp;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
+import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -17,13 +17,12 @@ import org.springframework.web.client.RestTemplate;
 @Transactional(rollbackFor = RestClientException.class)
 public class OtpService {
     private static final Logger logger = LoggerFactory.getLogger(OtpService.class);
-    public static final String EMPTY_STRING = "";
 
     public ResponseEntity<IvsResponseOtp> requestOtp(IvsRequestOtpVO ivsRequestOtpVO) {
-
+        String ivsDefaultMessageText = "";
         Integer ivsContextId = ivsRequestOtpVO.getApplication().getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
         String ivsSenderName = ivsRequestOtpVO.getApplication().getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
-        String ivsMessageText = ivsRequestOtpVO.getApplication().getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT, EMPTY_STRING);
+        String ivsMessageText = ivsRequestOtpVO.getApplication().getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT, ivsDefaultMessageText);
 
         validateProperties(ivsRequestOtpVO, ivsContextId, ivsSenderName);
 
@@ -52,7 +51,7 @@ public class OtpService {
         HttpEntity entity = new HttpEntity(ivsRequestOTP, headers);
 
         ResponseEntity<IvsResponseOtp> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, IvsResponseOtp.class);
-        logger.info("revieved response from IVS [{}]", responseEntity);
+        logger.info("received response from IVS [{}]", responseEntity);
 
         return responseEntity;
     }

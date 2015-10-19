@@ -50,6 +50,10 @@ public class OtpServiceTest {
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
                         .withBody("{ \"serialcode\" : \"bc4bbdd9-4e9e-4ebf-83bb-0d411a8ca33d\"}")));
+
+        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT)).willReturn(IVS_MESSAGE_TEXT);
+        given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(IVS_CONTEXT_ID);
+        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME)).willReturn(IVS_SENDER_NAME);
     }
 
     private void createTestData() {
@@ -66,8 +70,6 @@ public class OtpServiceTest {
     @Test(expected = ApplicationPropertyException.class)
     public void missingApplicationPropertyIvsContextIdShouldFail() {
         //given
-        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME)).willReturn(IVS_SENDER_NAME);
-        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT)).willReturn(IVS_MESSAGE_TEXT);
         given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(null);
         //when
         this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
@@ -76,8 +78,6 @@ public class OtpServiceTest {
     @Test(expected = ApplicationPropertyException.class)
     public void missingApplicationPropertyIvsSenderNameShouldFail() {
         //given
-        given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(IVS_CONTEXT_ID);
-        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT)).willReturn(IVS_MESSAGE_TEXT);
         given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME)).willReturn(null);
         //when
         this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
@@ -87,8 +87,7 @@ public class OtpServiceTest {
     public void missingIvsMessageTextShouldReturnOk(){
         //given
         given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT)).willReturn(null);
-        given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(IVS_CONTEXT_ID);
-        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME)).willReturn(IVS_SENDER_NAME);
+
         // when
         ResponseEntity<IvsResponseOtp> ivsResponseOTPResponseEntity = this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
         Assert.assertEquals(HttpStatus.OK, ivsResponseOTPResponseEntity.getStatusCode());
@@ -98,10 +97,6 @@ public class OtpServiceTest {
 
     @Test
     public void requestOtpAllOk() {
-        //given
-        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT)).willReturn(IVS_MESSAGE_TEXT);
-        given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(IVS_CONTEXT_ID);
-        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME)).willReturn(IVS_SENDER_NAME);
         // when
         ResponseEntity<IvsResponseOtp> ivsResponseOTPResponseEntity = this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
         Assert.assertEquals(HttpStatus.OK, ivsResponseOTPResponseEntity.getStatusCode());

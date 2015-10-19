@@ -5,7 +5,7 @@ public enum SystemPropertyEnum {
 
     private String property;
 
-     SystemPropertyEnum(String property) {
+    SystemPropertyEnum(String property) {
         this.property = property;
     }
 
