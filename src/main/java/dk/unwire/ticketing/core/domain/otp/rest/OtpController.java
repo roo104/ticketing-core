@@ -18,9 +18,7 @@ public class OtpController {
     public OtpApplication otpApplication;
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<BaseResponse> registerOtp(@PathVariable int applicationId, @RequestBody @Valid OtpRequest otpRequest) {
-
         this.otpApplication.requestOtp(new OtpRequestVO(otpRequest.getMsisdn(), applicationId));
-
         StatusCode statusCode = StatusCode.OK;
 
         return new ResponseEntity<>(new BaseResponse(statusCode), statusCode.getHttpStatus());

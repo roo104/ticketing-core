@@ -51,6 +51,9 @@ public class OtpService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity entity = new HttpEntity(ivsRequestOTP, headers);
 
-        return restTemplate.exchange(url, HttpMethod.POST, entity, IvsResponseOtp.class);
+        ResponseEntity<IvsResponseOtp> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, IvsResponseOtp.class);
+        logger.info("revieved response from IVS [{}]", responseEntity);
+
+        return responseEntity;
     }
 }

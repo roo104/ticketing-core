@@ -9,6 +9,13 @@ public class IvsResponseOtp {
     public void setSerialCode(String serialCode) {
         this.serialCode = serialCode;
     }
+
+    @Override
+    public String toString() {
+        return "IvsResponseOtp{" +
+                "serialCode='" + this.serialCode + '\'' +
+                '}';
+    }
 }
 
 
