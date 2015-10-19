@@ -1,8 +1,6 @@
-package domain.application.model;
+package dk.unwire.ticketing.core.domain.application.model;
 
 import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
-import dk.unwire.ticketing.core.domain.application.model.Application;
-import dk.unwire.ticketing.core.domain.application.model.ApplicationProperty;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,24 +16,20 @@ public class ApplicationTest {
     public static final String IVS_CONTEXT_ID = "1";
     public static final int IVS_CONTEXT_ID_AS_INTEGER = 1;
     public static final String IVS_SENDER_NAME = "Unwire";
-    public static final String IVS_MESSAGE_TEXT = "otp is:";
     public static final String DEFAULT_STRING_VALUE = "return me";
     public static final Integer DEFAULT_INT_VALUE = 10;
 
     @Before
     public void setUp() {
         this.classUnderTest = new Application();
-        this.testApplicationProperty = new ApplicationProperty();
         this.applicationPropertyMap = new HashMap<>();
         this.classUnderTest.setApplicationProperties(this.applicationPropertyMap);
-
-
     }
 
     @Test
     public void getStringApplicationProperty() {
         //given
-        this.testApplicationProperty.setValue(IVS_SENDER_NAME);
+        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME);
         this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
         //when
         String result = this.classUnderTest.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
@@ -62,7 +56,8 @@ public class ApplicationTest {
     @Test
     public void getIntApplicationProperty() {
         //given
-        this.testApplicationProperty.setValue(IVS_CONTEXT_ID);
+        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), IVS_CONTEXT_ID);
+
         this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), this.testApplicationProperty);
         //when
         int result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
@@ -81,7 +76,7 @@ public class ApplicationTest {
     @Test
     public void getIntApplicationPropertyThatIsEmptyWithDefaultValue() {
         //when
-        Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID,DEFAULT_INT_VALUE);
+        Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID, DEFAULT_INT_VALUE);
         //then
         assertEquals(DEFAULT_INT_VALUE, result);
     }
@@ -89,7 +84,7 @@ public class ApplicationTest {
     @Test
     public void getIntApplicationPropertyNotAnInteger() {
         //given
-        this.testApplicationProperty.setValue(IVS_SENDER_NAME);
+
         this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
         //when
         Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
@@ -100,7 +95,8 @@ public class ApplicationTest {
     @Test
     public void getIntApplicationPropertyNotAnIntegerWithDefaultValue() {
         //given
-        this.testApplicationProperty.setValue(IVS_SENDER_NAME);
+        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME);
+
         this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
         //when
         Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);

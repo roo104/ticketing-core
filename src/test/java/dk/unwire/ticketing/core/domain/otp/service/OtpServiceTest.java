@@ -1,14 +1,14 @@
-package domain.otp.service;
+package dk.unwire.ticketing.core.domain.otp.service;
 
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationPropertyException;
 import dk.unwire.ticketing.core.domain.application.model.Application;
-import dk.unwire.ticketing.core.domain.otp.service.OtpService;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
+import dk.unwire.ticketing.core.domain.otp.OtpConstants;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
+import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
 import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperty;
-import domain.otp.OtpConstants;
+import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperyFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -27,24 +27,21 @@ public class OtpServiceTest {
 
     @ClassRule
     public static WireMockClassRule wireMockRule = new WireMockClassRule(OtpConstants.WIREMOCK_PORT);
-    public static final Integer IVS_CONTEXT_ID = 1;
-    public static final String IVS_SENDER_NAME = "Unwire";
-    public static final String IVS_MESSAGE_TEXT = "otp is:";
+    private static final Integer IVS_CONTEXT_ID = 1;
+    private static final String IVS_SENDER_NAME = "Unwire";
+    private static final String IVS_MESSAGE_TEXT = "otp is:";
+    private final long TEST_MSISDN = 12345678;
     private OtpService classUnderTest;
     private Application testApplication;
-    private SystemProperty testIvsBaseUrl;
+    private final SystemProperty testIvsBaseUrl = SystemProperyFactory.getTestSystemProperty();
     private IvsRequestOtpVO testIvsRequestOtpVO;
-    private final long TEST_MSISDN = 12345678;
 
     @Before
     public void setUp() {
         this.classUnderTest = new OtpService();
         this.testApplication = mock(Application.class);
-        this.testIvsBaseUrl = mock(SystemProperty.class);
 
         createTestData();
-        given(this.testIvsRequestOtpVO.getSystemProperty().getValue()).willReturn(OtpConstants.IVS_BASE_URL);
-
         wireMockRule.givenThat(post(urlEqualTo(OtpConstants.IVS_REQUEST_RESOURCE))
                 .willReturn(aResponse()
                         .withStatus(HttpStatus.OK.value())
@@ -63,9 +60,7 @@ public class OtpServiceTest {
                 .withMsisdn(this.TEST_MSISDN)
                 .withApplication(this.testApplication)
                 .build();
-
     }
-
 
     @Test(expected = ApplicationPropertyException.class)
     public void missingApplicationPropertyIvsContextIdShouldFail() {
@@ -84,23 +79,20 @@ public class OtpServiceTest {
     }
 
     @Test
-    public void missingIvsMessageTextShouldReturnOk(){
+    public void missingIvsMessageTextShouldReturnOk() {
         //given
         given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT)).willReturn(null);
 
         // when
         ResponseEntity<IvsResponseOtp> ivsResponseOTPResponseEntity = this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
         Assert.assertEquals(HttpStatus.OK, ivsResponseOTPResponseEntity.getStatusCode());
-
     }
-
 
     @Test
     public void requestOtpAllOk() {
         // when
         ResponseEntity<IvsResponseOtp> ivsResponseOTPResponseEntity = this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
         Assert.assertEquals(HttpStatus.OK, ivsResponseOTPResponseEntity.getStatusCode());
-
     }
 }
 

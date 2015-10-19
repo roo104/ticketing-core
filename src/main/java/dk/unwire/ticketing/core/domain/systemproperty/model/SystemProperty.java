@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="system_property")
-public class SystemProperty {
+public final class SystemProperty {
     @Id
     @Column(name = "id")
     private int id;
@@ -16,7 +16,9 @@ public class SystemProperty {
     @Column(name = "value")
     private String value;
 
-    public SystemProperty() {
+    protected SystemProperty(String name, String value) {
+        this.name = name;
+        this.value = value;
     }
 
     public String getValue() {

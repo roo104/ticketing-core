@@ -1,4 +1,4 @@
-package domain.application.service;
+package dk.unwire.ticketing.core.domain.application.service;
 
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationNotFoundException;
 import dk.unwire.ticketing.core.domain.application.model.Application;

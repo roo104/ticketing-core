@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "application_property")
-public class ApplicationProperty {
+public final class ApplicationProperty {
     @Id
     @Column(name = "id")
     private int id;
@@ -15,6 +15,14 @@ public class ApplicationProperty {
     private String name;
     @Column(name = "value")
     private String value;
+
+    private ApplicationProperty() {
+    }
+
+    protected ApplicationProperty(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 
     public int getId() {
         return this.id;
@@ -26,17 +34,5 @@ public class ApplicationProperty {
 
     public String getName() {
         return this.name;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
     }
 }

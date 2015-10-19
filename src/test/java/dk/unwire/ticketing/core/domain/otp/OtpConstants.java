@@ -1,4 +1,4 @@
-package domain.otp;
+package dk.unwire.ticketing.core.domain.otp;
 
 public final class OtpConstants {
     public static final int WIREMOCK_PORT = 7070;
