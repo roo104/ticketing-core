@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class IvsErrorResponse {
-    private int errorCode;
-    private String message;
-    private int secondBeforeRetry;
+    private final int errorCode;
+    private final String message;
+    private final int secondBeforeRetry;
 
     @JsonCreator
     public IvsErrorResponse(@JsonProperty("errorCode") int errorCode, @JsonProperty("message") String message, @JsonProperty("secondBeforeRetry") int secondBeforeRetry) {
