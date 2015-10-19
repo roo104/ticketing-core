@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="system_property")
-public final class SystemProperty {
+public class SystemProperty {
     @Id
     @Column(name = "id")
     private int id;
