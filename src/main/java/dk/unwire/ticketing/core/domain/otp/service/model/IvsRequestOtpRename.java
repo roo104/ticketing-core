@@ -1,10 +1,10 @@
 package dk.unwire.ticketing.core.domain.otp.service.model;
 
-public class IVSRequestOTP {
+public class IvsRequestOtpRename {
     String message;
     SenderVO sender;
 
-    public IVSRequestOTP(String message, String sender) {
+    public IvsRequestOtpRename(String message, String sender) {
         this.message = message;
         this.sender = new SenderVO(sender);
 

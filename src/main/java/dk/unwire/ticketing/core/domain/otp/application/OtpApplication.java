@@ -4,7 +4,7 @@ import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.application.service.ApplicationService;
 import dk.unwire.ticketing.core.domain.otp.rest.model.OtpRequestVO;
 import dk.unwire.ticketing.core.domain.otp.service.OtpService;
-import dk.unwire.ticketing.core.domain.otp.service.model.IVSResponseOTP;
+import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtpRenamew;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
 import dk.unwire.ticketing.core.domain.systemproperty.enums.SystemPropertyEnum;
 import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperty;
@@ -25,7 +25,7 @@ public class OtpApplication {
     @Autowired
     SystemPropertyService systemPropertyService;
 
-    public ResponseEntity<IVSResponseOTP> requestOtp(OtpRequestVO requestVO) {
+    public ResponseEntity<IvsResponseOtpRenamew> requestOtp(OtpRequestVO requestVO) {
         Application application = this.applicationService.getApplication(requestVO.getApplicationId());
         SystemProperty baseUrlProperty = this.systemPropertyService.getSystemProperty(SystemPropertyEnum.IVS_BASEURL);
 

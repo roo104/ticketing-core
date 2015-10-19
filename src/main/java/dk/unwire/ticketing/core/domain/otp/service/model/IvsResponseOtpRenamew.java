@@ -1,9 +1,9 @@
 package dk.unwire.ticketing.core.domain.otp.service.model;
 
-public class IVSResponseOTP {
+public class IvsResponseOtpRenamew {
     String serialCode;
 
-    public IVSResponseOTP() {
+    public IvsResponseOtpRenamew() {
     }
 
     public void setSerialCode(String serialCode) {
