@@ -5,7 +5,7 @@ import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationPropertyException;
 import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.otp.service.OtpService;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtpRenamew;
+import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
 import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperty;
 import domain.otp.OtpConstants;
@@ -90,7 +90,7 @@ public class OtpServiceTest {
         given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(IVS_CONTEXT_ID);
         given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME)).willReturn(IVS_SENDER_NAME);
         // when
-        ResponseEntity<IvsResponseOtpRenamew> ivsResponseOTPResponseEntity = this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
+        ResponseEntity<IvsResponseOtp> ivsResponseOTPResponseEntity = this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
         Assert.assertEquals(HttpStatus.OK, ivsResponseOTPResponseEntity.getStatusCode());
 
     }
@@ -103,7 +103,7 @@ public class OtpServiceTest {
         given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(IVS_CONTEXT_ID);
         given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME)).willReturn(IVS_SENDER_NAME);
         // when
-        ResponseEntity<IvsResponseOtpRenamew> ivsResponseOTPResponseEntity = this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
+        ResponseEntity<IvsResponseOtp> ivsResponseOTPResponseEntity = this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
         Assert.assertEquals(HttpStatus.OK, ivsResponseOTPResponseEntity.getStatusCode());
 
     }

@@ -2,8 +2,8 @@ package dk.unwire.ticketing.core.domain.otp.service;
 
 import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationPropertyException;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpRename;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtpRenamew;
+import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtp;
+import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class OtpService {
     private static final Logger logger = LoggerFactory.getLogger(OtpService.class);
     public static final String EMPTY_STRING = "";
 
-    public ResponseEntity<IvsResponseOtpRenamew> requestOtp(IvsRequestOtpVO ivsRequestOtpVO) {
+    public ResponseEntity<IvsResponseOtp> requestOtp(IvsRequestOtpVO ivsRequestOtpVO) {
 
         Integer ivsContextId = ivsRequestOtpVO.getApplication().getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
         String ivsSenderName = ivsRequestOtpVO.getApplication().getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
@@ -28,9 +28,9 @@ public class OtpService {
         validateProperties(ivsRequestOtpVO, ivsContextId, ivsSenderName);
 
         String url = String.format("%s/context/%d/validation/identity/%d", ivsRequestOtpVO.getSystemProperty().getValue(), ivsContextId, ivsRequestOtpVO.getMsisdn());
-        IvsRequestOtpRename ivsRequestOTP = new IvsRequestOtpRename(ivsMessageText, ivsSenderName);
+        IvsRequestOtp ivsRequestOTP = new IvsRequestOtp(ivsMessageText, ivsSenderName);
 
-        ResponseEntity<IvsResponseOtpRenamew> response = executeRequest(ivsRequestOTP, url);
+        ResponseEntity<IvsResponseOtp> response = executeRequest(ivsRequestOTP, url);
 
         return response;
 
@@ -47,14 +47,14 @@ public class OtpService {
         logger.debug("Received application properties for application with id [{}] ivs.context.id = [{}] ivs.sender.name = [{}]", ivsRequestOtpVO.getApplication().getId(), ivsContextId, ivsSenderName);
     }
 
-    private ResponseEntity<IvsResponseOtpRenamew> executeRequest(IvsRequestOtpRename ivsRequestOTP, String url) {
+    private ResponseEntity<IvsResponseOtp> executeRequest(IvsRequestOtp ivsRequestOTP, String url) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity entity = new HttpEntity(ivsRequestOTP, headers);
-        ResponseEntity<IvsResponseOtpRenamew> response = null;
+        ResponseEntity<IvsResponseOtp> response = null;
 
-        response = restTemplate.exchange(url, HttpMethod.POST, entity, IvsResponseOtpRenamew.class);
+        response = restTemplate.exchange(url, HttpMethod.POST, entity, IvsResponseOtp.class);
 
 
         return response;
