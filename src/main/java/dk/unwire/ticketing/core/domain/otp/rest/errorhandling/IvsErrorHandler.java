@@ -12,7 +12,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +24,6 @@ public class IvsErrorHandler {
     private static final Logger logger = LoggerFactory.getLogger(IvsErrorHandler.class);
 
     @ExceptionHandler(IvsErrorException.class)
-    @ResponseBody
     public ResponseEntity<BaseResponse> handleHttpError(HttpServletRequest req, IvsErrorException e) {
         HttpStatusCodeException statusCodeException = (HttpStatusCodeException) e.getCause();
         logger.error("Error received for request [{}] error message [{}]", req.getRequestURI(), statusCodeException.getResponseBodyAsString());

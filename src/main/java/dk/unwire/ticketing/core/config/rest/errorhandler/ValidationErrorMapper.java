@@ -13,7 +13,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ public class ValidationErrorMapper {
     public static final String VALIDATION_ERROR = "Could not validate the request";
 
     @ExceptionHandler()
-    @ResponseBody
     public ResponseEntity<BaseResponse> validationError(MethodArgumentNotValidException ex, HttpServletRequest request) {
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         List<String> errorInfo = new ArrayList<>();
