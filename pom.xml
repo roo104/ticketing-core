@@ -102,7 +102,19 @@
         <dependency>
             <groupId>dk.unwire.ticketing</groupId>
             <artifactId>spring-rest</artifactId>
-            <version>1.0.18-RELEASE</version>
+            <version>1.0.22-RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>1.52</version>
+            <classifier>standalone</classifier>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

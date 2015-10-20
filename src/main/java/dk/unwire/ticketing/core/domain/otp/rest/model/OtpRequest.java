@@ -1,10 +1,14 @@
 package dk.unwire.ticketing.core.domain.otp.rest.model;
 
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class OtpRequest {
     @NotNull
+    @Digits(integer=20, fraction=0)
+    @Min(value=0)
     private Long msisdn;
 
     public void setMsisdn(Long msisdn) {
@@ -15,4 +19,3 @@ public class OtpRequest {
         return this.msisdn;
     }
 }
-
