@@ -2,7 +2,6 @@ package dk.unwire.ticketing.core.domain.otp.service;
 
 import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationPropertyException;
-import dk.unwire.ticketing.core.domain.otp.enums.OtpResponseInfo;
 import dk.unwire.ticketing.core.domain.otp.exception.IvsErrorException;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtp;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
@@ -57,20 +56,7 @@ public class OtpService {
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
         } catch (HttpStatusCodeException e) {
-            HttpStatus httpStatus = e.getStatusCode();
-            switch (httpStatus) {
-                case INTERNAL_SERVER_ERROR:
-                    throw new IvsErrorException(e,OtpResponseInfo.OTP_VALIDATION_FAILED);
-
-                case FORBIDDEN:
-                    throw new IvsErrorException(e,OtpResponseInfo.OTP_MSISDN_BLOCKED);
-
-                case BAD_REQUEST:
-                    throw new IvsErrorException(e,OtpResponseInfo.OTP_SIGNUP_FAILED);
-
-                default:
-                    throw new IvsErrorException(e,OtpResponseInfo.OTP_VALIDATION_FAILED);
-            }
+            throw new IvsErrorException(e);
         }
         logger.info("received response from IVS [{}]", responseEntity);
     }
