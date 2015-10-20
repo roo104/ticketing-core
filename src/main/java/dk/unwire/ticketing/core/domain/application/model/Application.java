@@ -208,11 +208,8 @@ public class Application {
         return this.id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public void setApplicationProperties(Map<String, ApplicationProperty> applicationProperties) {
+    protected void setApplicationProperties(Map<String, ApplicationProperty> applicationProperties) {
         this.applicationProperties = applicationProperties;
     }
 
@@ -223,11 +220,9 @@ public class Application {
      * @return If value is empty null will be returned.
      */
     public String getStringApplicationProperty(ApplicationPropertyKey keyName) {
-        String result;
+        String result = null;
         ApplicationProperty property = this.applicationProperties.get(keyName.getPropertyKey());
-        if (property == null) {
-            result = null;
-        } else {
+        if (property != null) {
             result = property.getValue();
         }
         return result;

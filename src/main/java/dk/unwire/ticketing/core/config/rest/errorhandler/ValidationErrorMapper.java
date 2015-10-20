@@ -30,8 +30,7 @@ public class ValidationErrorMapper {
         List<String> errorInfo = new ArrayList<>();
 
         for (FieldError fieldError : fieldErrors) {
-            String errorMessage = fieldError.getField() + " "
-                    + fieldError.getDefaultMessage();
+            String errorMessage = String.format("%s %s", fieldError.getField(), fieldError.getDefaultMessage());
             errorInfo.add(errorMessage);
         }
         logger.info("Error parsing [{}] request with id [{}] to [{}] errors: [{}]", request.getMethod(),
