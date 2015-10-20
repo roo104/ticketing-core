@@ -5,12 +5,10 @@ import dk.unwire.ticketing.core.domain.application.service.ApplicationService;
 import dk.unwire.ticketing.core.domain.otp.rest.model.OtpRequestVO;
 import dk.unwire.ticketing.core.domain.otp.service.OtpService;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
 import dk.unwire.ticketing.core.domain.systemproperty.enums.SystemPropertyEnum;
 import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperty;
 import dk.unwire.ticketing.core.domain.systemproperty.service.SystemPropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +22,7 @@ public class OtpApplication {
     @Autowired
     SystemPropertyService systemPropertyService;
 
-    public ResponseEntity<IvsResponseOtp> requestOtp(OtpRequestVO requestVO) {
+    public void requestOtp(OtpRequestVO requestVO) {
         Application application = this.applicationService.getApplication(requestVO.getApplicationId());
         SystemProperty baseUrlProperty = this.systemPropertyService.getSystemProperty(SystemPropertyEnum.IVS_BASEURL);
 
@@ -34,7 +32,7 @@ public class OtpApplication {
                 .withSystemProperty(baseUrlProperty)
                 .build();
 
-        return this.otpService.requestOtp(ivsRequestOtpVO);
+     this.otpService.requestOtp(ivsRequestOtpVO);
     }
 
 }

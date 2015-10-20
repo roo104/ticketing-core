@@ -102,7 +102,7 @@
         <dependency>
             <groupId>dk.unwire.ticketing</groupId>
             <artifactId>spring-rest</artifactId>
-            <version>1.0.18-RELEASE</version>
+            <version>1.0.22-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

@@ -2,23 +2,26 @@ package dk.unwire.ticketing.core.domain.otp.service;
 
 import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationPropertyException;
+import dk.unwire.ticketing.core.domain.otp.enums.OtpResponseInfo;
+import dk.unwire.ticketing.core.domain.otp.exception.IvsErrorException;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtp;
 import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsResponseOtp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
 
 @Service
 @Transactional(rollbackFor = RestClientException.class)
 public class OtpService {
     private static final Logger logger = LoggerFactory.getLogger(OtpService.class);
 
-    public ResponseEntity<IvsResponseOtp> requestOtp(IvsRequestOtpVO ivsRequestOtpVO) {
+    public void requestOtp(IvsRequestOtpVO ivsRequestOtpVO) {
         String ivsDefaultMessageText = "";
         Integer ivsContextId = ivsRequestOtpVO.getApplication().getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
         String ivsSenderName = ivsRequestOtpVO.getApplication().getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
@@ -29,7 +32,7 @@ public class OtpService {
         String url = String.format("%s/context/%d/validation/identity/%d", ivsRequestOtpVO.getSystemProperty().getValue(), ivsContextId, ivsRequestOtpVO.getMsisdn());
         IvsRequestOtp ivsRequestOTP = new IvsRequestOtp(ivsMessageText, ivsSenderName);
 
-        return executeRequest(ivsRequestOTP, url);
+        executeRequest(ivsRequestOTP, url);
 
     }
 
@@ -44,15 +47,31 @@ public class OtpService {
         logger.debug("Received application properties for application with id [{}] ivs.context.id = [{}] ivs.sender.name = [{}]", ivsRequestOtpVO.getApplication().getId(), ivsContextId, ivsSenderName);
     }
 
-    private ResponseEntity<IvsResponseOtp> executeRequest(IvsRequestOtp ivsRequestOTP, String url) {
+    private void executeRequest(IvsRequestOtp ivsRequestOTP, String url) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity entity = new HttpEntity(ivsRequestOTP, headers);
+        ResponseEntity<String> responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
-        ResponseEntity<IvsResponseOtp> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, IvsResponseOtp.class);
+        } catch (HttpStatusCodeException e) {
+            HttpStatus httpStatus = e.getStatusCode();
+            switch (httpStatus) {
+                case INTERNAL_SERVER_ERROR:
+                    throw new IvsErrorException(e,OtpResponseInfo.OTP_VALIDATION_FAILED);
+
+                case FORBIDDEN:
+                    throw new IvsErrorException(e,OtpResponseInfo.OTP_MSISDN_BLOCKED);
+
+                case BAD_REQUEST:
+                    throw new IvsErrorException(e,OtpResponseInfo.OTP_SIGNUP_FAILED);
+
+                default:
+                    throw new IvsErrorException(e,OtpResponseInfo.OTP_VALIDATION_FAILED);
+            }
+        }
         logger.info("received response from IVS [{}]", responseEntity);
-
-        return responseEntity;
     }
 }

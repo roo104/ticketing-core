@@ -1,9 +1,9 @@
 package dk.unwire.ticketing.core.domain.application.rest.errorhandling;
 
+import dk.unwire.ticketing.core.domain.application.enums.ApplicationResponseInfo;
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationNotFoundException;
 import dk.unwire.ticketing.spring.rest.common.helper.RequestIdHelper;
 import dk.unwire.ticketing.spring.rest.common.response.BaseResponse;
-import dk.unwire.ticketing.spring.rest.common.response.StatusCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -23,9 +23,10 @@ public class ApplicationExceptionHandler {
     protected ResponseEntity<BaseResponse> argumentError(ApplicationNotFoundException e, HttpServletRequest request) {
         logger.info("Error validating [{}] request with id [{}] to [{}] error: [{}]", request.getMethod(),
                 RequestIdHelper.get(request), request.getRequestURI(), e.getMessage());
-        BaseResponse baseResponse = new BaseResponse(StatusCode.AUTH_ERROR, e.getMessage());
+        ApplicationResponseInfo applicationResponseInfo = ApplicationResponseInfo.APPLICATION_NOT_FOUND;
+        BaseResponse baseResponse = new BaseResponse(applicationResponseInfo);
 
-        return new ResponseEntity<>(baseResponse, StatusCode.AUTH_ERROR.getHttpStatus());
+        return new ResponseEntity<>(baseResponse, applicationResponseInfo.getHttpStatus());
     }
 }
 
