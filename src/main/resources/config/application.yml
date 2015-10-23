@@ -29,7 +29,7 @@ spring:
 
 ---
 spring:
-  profiles: server-local
+  profiles: server-migrate
 
   datasource:
     jndi-name: java:jboss/ticketing_core
