@@ -29,13 +29,10 @@ public final class AccountIdentifier {
 
     @Builder
     public AccountIdentifier(int applicationId, String identifier, Account account, IdentifierType identifierType) {
-
         this.applicationId = applicationId;
         this.identifier = identifier;
         this.account = account;
         this.identifierType = identifierType.getId();
-
     }
-
 
 }

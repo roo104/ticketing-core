@@ -2,7 +2,9 @@ package dk.unwire.ticketing.core.domain.account.model;
 
 import com.unwire.mticket.util.collection.CollectionUtil;
 import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -11,6 +13,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Account {
     public static final int ZERO_PURCHASES = 0;
     @Getter
@@ -66,10 +69,6 @@ public final class Account {
 
     public void addAccountIdentifier(AccountIdentifier accountIdentifier) {
         this.accountIdentifiers.add(accountIdentifier);
-
-    }
-
-    public Account() {
     }
 
     /**
