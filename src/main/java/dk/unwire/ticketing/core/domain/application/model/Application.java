@@ -278,7 +278,7 @@ public class Application {
             try {
                 result = Integer.parseInt(property.getValue());
             } catch (NumberFormatException e) {
-                logger.debug("Could not parse ApplicationProperty with key [{}] and value [{}] to integer", property.getName(), property.getValue());
+                logger.debug("Could not parse ApplicationProperty with key [{}] and value [{}] to integer - Using provided default value {}", property.getName(), property.getValue(), defaultValue);
             }
         }
         return result;

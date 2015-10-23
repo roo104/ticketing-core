@@ -10,17 +10,15 @@ import javax.persistence.*;
 @Entity
 @Table(name = "account_identifier")
 public final class AccountIdentifier {
-    @Getter
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Getter
     @Column(name = "application_id")
     private int applicationId;
     @Getter
     @Column(name = "identifier_value")
-    private String identifier;
+    protected String identifier;
     @Getter
     @Column(name = "identifier_type")
     private int identifierType;
@@ -28,9 +26,6 @@ public final class AccountIdentifier {
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     private Account account;
-
-    public AccountIdentifier() {
-    }
 
     @Builder
     public AccountIdentifier(int applicationId, String identifier, Account account, IdentifierType identifierType) {

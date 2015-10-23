@@ -24,10 +24,6 @@ public final class ApplicationProperty {
         this.value = value;
     }
 
-    public int getId() {
-        return this.id;
-    }
-
     public String getValue() {
         return this.value;
     }

@@ -3,7 +3,6 @@ package dk.unwire.ticketing.core.domain.account.service;
 import dk.unwire.ticketing.core.TicketingCoreApplication;
 import dk.unwire.ticketing.core.domain.account.model.AccountIdentifier;
 import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
-import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.otp.rest.model.confirm.OtpConfirmRequest;
 import dk.unwire.ticketing.core.domain.otp.rest.model.confirm.OtpConfirmRequestVO;
 import org.junit.Before;
@@ -25,18 +24,18 @@ import static junit.framework.Assert.assertNotNull;
 @WebAppConfiguration
 @Transactional
 public class AccountServiceTest {
-    private Application testApplication;
+    public static final String MSISDN = "4511111111";
+    public static final String OTP = "1234";
+    public static final int APPLICATION_ID = 1;
     private FindOrCreateAccountVO findOrCreateAccountVO;
     @Autowired
     private AccountService classUnderTest;
 
     @Before
     public void setUp() {
-        this.testApplication = new Application();
-        OtpConfirmRequest otpConfirmRequest = new OtpConfirmRequest("4511111111", "1234");
-        OtpConfirmRequestVO otpConfirmRequestVO = new OtpConfirmRequestVO(otpConfirmRequest, 1);
+        OtpConfirmRequest otpConfirmRequest = new OtpConfirmRequest(MSISDN, OTP);
+        OtpConfirmRequestVO otpConfirmRequestVO = new OtpConfirmRequestVO(otpConfirmRequest, APPLICATION_ID);
         this.findOrCreateAccountVO = FindOrCreateAccountVO.fromOtpConfirmRequestVO(otpConfirmRequestVO);
-
     }
 
     @Test

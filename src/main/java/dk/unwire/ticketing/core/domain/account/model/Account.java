@@ -18,37 +18,27 @@ public final class Account {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Getter
     @Column(name = "application_id")
     private int applicationId;
     @Getter
     @Column(name = "msisdn")
     private Long msisdn;
-    @Getter
     @Column(name = "created")
     private ZonedDateTime created;
-    @Getter
     @Column(name = "blacklisted")
     private boolean blacklisted;
-    @Getter
     @Column(name = "amount_used")
     private int amountUsed;
-    @Getter
     @Column(name = "buy_attempts")
     private int buyAttempts;
-    @Getter
     @Column(name = "successful_purchases")
     private int successfulPurchases;
-    @Getter
     @Column(name = "blacklist_expiredate")
     private ZonedDateTime blacklistExpiredate;
-    @Getter
     @Column(name = "billing_account_id")
     private int billingAccountId;
-    @Getter
     @Column(name = "ars_account_id")
     private long arsAccountId;
-    @Getter
     @Column(name = "ars_user_id")
     private long arsUserId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")

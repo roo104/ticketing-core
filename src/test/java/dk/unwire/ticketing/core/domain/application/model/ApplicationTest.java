@@ -84,7 +84,6 @@ public class ApplicationTest {
     @Test
     public void getIntApplicationPropertyNotAnInteger() {
         //given
-
         this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
         //when
         Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
@@ -96,12 +95,11 @@ public class ApplicationTest {
     public void getIntApplicationPropertyNotAnIntegerWithDefaultValue() {
         //given
         this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME);
-
         this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
         //when
-        Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
+        Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME, DEFAULT_INT_VALUE);
         //then
-        assertEquals(null, result);
+        assertEquals(DEFAULT_INT_VALUE, result);
     }
 
 }
