@@ -6,7 +6,7 @@
 
     <groupId>dk.unwire.ticketing</groupId>
     <artifactId>ticketing-core</artifactId>
-    <version>develop- SNAPSHOT</version>
+    <version>develop-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>${project.artifactId}</name>
@@ -79,12 +79,6 @@
             <version>3.2.1</version>
         </dependency>
         <dependency>
-            <groupId>org.flywaydb.flyway-test-extensions</groupId>
-            <artifactId>flyway-spring-test</artifactId>
-            <version>3.2.1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-core</artifactId>
             <version>5.7.0</version>
@@ -103,12 +97,12 @@
         <dependency>
             <groupId>com.unwire.mticket</groupId>
             <artifactId>mticket-util</artifactId>
-            <version>1.19.109- RELEASE</version>
+            <version>1.19.109-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>dk.unwire.ticketing</groupId>
             <artifactId>spring-rest</artifactId>
-            <version>1.0.26- RELEASE</version>
+            <version>1.0.26-RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
