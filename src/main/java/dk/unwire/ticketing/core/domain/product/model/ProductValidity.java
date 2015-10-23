@@ -4,8 +4,9 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "product_validity", schema = "", catalog = "mticket_application")
+@Table(name = "product_validity")
 public class ProductValidity {
+
     private int id;
     private Timestamp startTime;
     private Timestamp expireTime;
@@ -84,33 +85,4 @@ public class ProductValidity {
         this.expirePattern = expirePattern;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ProductValidity that = (ProductValidity) o;
-
-        if (id != that.id) return false;
-        if (startDelayMinutes != that.startDelayMinutes) return false;
-        if (startTime != null ? !startTime.equals(that.startTime) : that.startTime != null) return false;
-        if (expireTime != null ? !expireTime.equals(that.expireTime) : that.expireTime != null) return false;
-        if (endDelayMinutes != null ? !endDelayMinutes.equals(that.endDelayMinutes) : that.endDelayMinutes != null)
-            return false;
-        if (startPattern != null ? !startPattern.equals(that.startPattern) : that.startPattern != null) return false;
-        return !(expirePattern != null ? !expirePattern.equals(that.expirePattern) : that.expirePattern != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (expireTime != null ? expireTime.hashCode() : 0);
-        result = 31 * result + startDelayMinutes;
-        result = 31 * result + (endDelayMinutes != null ? endDelayMinutes.hashCode() : 0);
-        result = 31 * result + (startPattern != null ? startPattern.hashCode() : 0);
-        result = 31 * result + (expirePattern != null ? expirePattern.hashCode() : 0);
-        return result;
-    }
 }

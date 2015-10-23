@@ -6,8 +6,8 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "invalid_buy_time")
-
 public class InvalidBuyTime {
+
     private int id;
     private Timestamp startDate;
     private Timestamp endDate;

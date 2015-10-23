@@ -3,8 +3,9 @@ package dk.unwire.ticketing.core.domain.product.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_property", schema = "", catalog = "mticket_application")
+@Table(name = "product_property")
 public class ProductProperty {
+
     private int id;
     private String name;
     private String value;

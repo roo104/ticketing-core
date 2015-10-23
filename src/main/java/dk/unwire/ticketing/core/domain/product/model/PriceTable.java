@@ -8,7 +8,7 @@ public class PriceTable {
 
     private int id;
     private String name;
-    private Byte deleted;
+    private boolean deleted;
     private Integer standardPeriodLength;
 
     @Id
@@ -33,11 +33,11 @@ public class PriceTable {
 
     @Basic
     @Column(name = "deleted")
-    public Byte getDeleted() {
+    public boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(Byte deleted) {
+    public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
 
