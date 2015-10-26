@@ -6,39 +6,36 @@ import javax.persistence.*;
 @Table(name = "product_property")
 public class ProductProperty {
 
-    private int id;
-    private String name;
-    private String value;
-
     @Id
     @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @Basic
     @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    private final String name;
     @Basic
     @Column(name = "value")
-    public String getValue() {
-        return value;
+    private final String value;
+
+    public long getId() {
+        return this.id;
     }
 
-    public void setValue(String value) {
+    public String getName() {
+        return this.name;
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
+    protected ProductProperty() {
+        this.name = null;
+        this.value = null;
+    }
+
+    public ProductProperty(String name, String value) {
+        this.name = name;
         this.value = value;
     }
-
-
 }

@@ -2,27 +2,47 @@ package dk.unwire.ticketing.core.domain.product.model;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
+    @Basic
+    @Column(name = "name")
     private String name;
+    @Basic
+    @Column(name = "type")
     private String type;
+    @Basic
+    @Column(name = "price")
     private Integer price;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_validity_id")
     private ProductValidity productValidity;
+    @Basic
+    @Column(name = "application_id")
     private Integer applicationId;
+    @Basic
+    @Column(name = "deleted")
     private boolean deleted;
+    @Basic
+    @Column(name = "certificate_enabled")
     private boolean certificateEnabled;
+    @Basic
+    @Column(name = "activated")
     private boolean activated;
+    @Basic
+    @Column(name = "product_variant")
     private Integer productVariant;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "price_table_id")
     private PriceTable priceTable;
+    @Basic
+    @Column(name = "vat")
     private String vat;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -31,106 +51,56 @@ public class Product {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Collection<InvalidBuyTime> invalidBuyTimes;
 
-
-    public int getId() {
-        return id;
+    public Product() {
+        this.productProperties = new HashSet<>();
+        this.invalidBuyTimes = new HashSet<>();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public long getId() {
+        return this.id;
     }
 
-    @Basic
-    @Column(name = "name")
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Basic
-    @Column(name = "type")
     public String getType() {
-        return type;
+        return this.type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Basic
-    @Column(name = "price")
     public Integer getPrice() {
-        return price;
+        return this.price;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    @Basic
-    @Column(name = "application_id")
     public Integer getApplicationId() {
-        return applicationId;
+        return this.applicationId;
     }
 
-    public void setApplicationId(Integer applicationId) {
-        this.applicationId = applicationId;
-    }
-
-    @Basic
-    @Column(name = "deleted")
     public boolean getDeleted() {
-        return deleted;
+        return this.deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    @Basic
-    @Column(name = "certificate_enabled")
     public boolean getCertificateEnabled() {
-        return certificateEnabled;
+        return this.certificateEnabled;
     }
 
-    public void setCertificateEnabled(boolean certificateEnabled) {
-        this.certificateEnabled = certificateEnabled;
-    }
-
-    @Basic
-    @Column(name = "activated")
     public boolean getActivated() {
-        return activated;
+        return this.activated;
     }
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    @Basic
-    @Column(name = "product_variant")
     public Integer getProductVariant() {
-        return productVariant;
+        return this.productVariant;
     }
 
-    public void setProductVariant(Integer productVariant) {
-        this.productVariant = productVariant;
-    }
-
-    @Basic
-    @Column(name = "vat")
     public String getVat() {
-        return vat;
-    }
-
-    public void setVat(String vat) {
-        this.vat = vat;
+        return this.vat;
     }
 
     public boolean isAllowedToPurchase() {
         return false;
+    }
+
+    public void addProductProperty(String name, String value) {
+        this.productProperties.add(new ProductProperty(name, value));
     }
 }

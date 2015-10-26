@@ -6,25 +6,22 @@ import javax.persistence.*;
 @Table(name = "price_table")
 public class PriceTable {
 
-    private int id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String name;
     private boolean deleted;
     private Integer standardPeriodLength;
 
-    @Id
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public long getId() {
+        return this.id;
     }
 
     @Basic
     @Column(name = "name")
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -34,7 +31,7 @@ public class PriceTable {
     @Basic
     @Column(name = "deleted")
     public boolean getDeleted() {
-        return deleted;
+        return this.deleted;
     }
 
     public void setDeleted(boolean deleted) {
@@ -44,7 +41,7 @@ public class PriceTable {
     @Basic
     @Column(name = "standard_period_length")
     public Integer getStandardPeriodLength() {
-        return standardPeriodLength;
+        return this.standardPeriodLength;
     }
 
     public void setStandardPeriodLength(Integer standardPeriodLength) {

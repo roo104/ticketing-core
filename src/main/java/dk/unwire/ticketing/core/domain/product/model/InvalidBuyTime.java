@@ -8,7 +8,10 @@ import java.sql.Timestamp;
 @Table(name = "invalid_buy_time")
 public class InvalidBuyTime {
 
-    private int id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private Timestamp startDate;
     private Timestamp endDate;
     private Short weekDay;
@@ -19,20 +22,15 @@ public class InvalidBuyTime {
     @JoinColumn(name = "product_id")
     private TimePeriod timePeriod;
 
-    @Id
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
+    public long getId() {
+        return this.id;
     }
 
     @Basic
     @Column(name = "start_date")
     public Timestamp getStartDate() {
-        return startDate;
+        return this.startDate;
     }
 
     public void setStartDate(Timestamp startDate) {
@@ -42,7 +40,7 @@ public class InvalidBuyTime {
     @Basic
     @Column(name = "end_date")
     public Timestamp getEndDate() {
-        return endDate;
+        return this.endDate;
     }
 
     public void setEndDate(Timestamp endDate) {
@@ -52,7 +50,7 @@ public class InvalidBuyTime {
     @Basic
     @Column(name = "week_day")
     public Short getWeekDay() {
-        return weekDay;
+        return this.weekDay;
     }
 
     public void setWeekDay(Short weekDay) {
@@ -62,7 +60,7 @@ public class InvalidBuyTime {
     @Basic
     @Column(name = "start_time")
     public Time getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 
     public void setStartTime(Time startTime) {
@@ -72,7 +70,7 @@ public class InvalidBuyTime {
     @Basic
     @Column(name = "end_time")
     public Time getEndTime() {
-        return endTime;
+        return this.endTime;
     }
 
     public void setEndTime(Time endTime) {
@@ -82,7 +80,7 @@ public class InvalidBuyTime {
     @Basic
     @Column(name = "inversed")
     public boolean getInversed() {
-        return inversed;
+        return this.inversed;
     }
 
     public void setInversed(boolean inversed) {

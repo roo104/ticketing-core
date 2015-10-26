@@ -7,7 +7,10 @@ import java.sql.Timestamp;
 @Table(name = "product_validity")
 public class ProductValidity {
 
-    private int id;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private Timestamp startTime;
     private Timestamp expireTime;
     private int startDelayMinutes;
@@ -15,20 +18,14 @@ public class ProductValidity {
     private String startPattern;
     private String expirePattern;
 
-    @Id
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public long getId() {
+        return this.id;
     }
 
     @Basic
     @Column(name = "start_time")
     public Timestamp getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 
     public void setStartTime(Timestamp startTime) {
@@ -38,7 +35,7 @@ public class ProductValidity {
     @Basic
     @Column(name = "expire_time")
     public Timestamp getExpireTime() {
-        return expireTime;
+        return this.expireTime;
     }
 
     public void setExpireTime(Timestamp expireTime) {
@@ -48,7 +45,7 @@ public class ProductValidity {
     @Basic
     @Column(name = "start_delay_minutes")
     public int getStartDelayMinutes() {
-        return startDelayMinutes;
+        return this.startDelayMinutes;
     }
 
     public void setStartDelayMinutes(int startDelayMinutes) {
@@ -58,7 +55,7 @@ public class ProductValidity {
     @Basic
     @Column(name = "end_delay_minutes")
     public Integer getEndDelayMinutes() {
-        return endDelayMinutes;
+        return this.endDelayMinutes;
     }
 
     public void setEndDelayMinutes(Integer endDelayMinutes) {
@@ -68,7 +65,7 @@ public class ProductValidity {
     @Basic
     @Column(name = "start_pattern")
     public String getStartPattern() {
-        return startPattern;
+        return this.startPattern;
     }
 
     public void setStartPattern(String startPattern) {
@@ -78,7 +75,7 @@ public class ProductValidity {
     @Basic
     @Column(name = "expire_pattern")
     public String getExpirePattern() {
-        return expirePattern;
+        return this.expirePattern;
     }
 
     public void setExpirePattern(String expirePattern) {
