@@ -1,90 +1,68 @@
 package dk.unwire.ticketing.core.domain.product.model;
 
+import lombok.Builder;
+
 import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "invalid_buy_time")
+@Builder
 public class InvalidBuyTime {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Basic
+    @Column(name = "start_date")
     private Timestamp startDate;
+    @Basic
+    @Column(name = "end_date")
     private Timestamp endDate;
+    @Basic
+    @Column(name = "week_day")
     private Short weekDay;
+    @Basic
+    @Column(name = "start_time")
     private Time startTime;
+    @Basic
+    @Column(name = "end_time")
     private Time endTime;
+    @Basic
+    @Column(name = "inversed")
     private boolean inversed;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private TimePeriod timePeriod;
 
-
     public long getId() {
         return this.id;
     }
 
-    @Basic
-    @Column(name = "start_date")
     public Timestamp getStartDate() {
         return this.startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
-        this.startDate = startDate;
-    }
-
-    @Basic
-    @Column(name = "end_date")
     public Timestamp getEndDate() {
         return this.endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
-        this.endDate = endDate;
-    }
-
-    @Basic
-    @Column(name = "week_day")
     public Short getWeekDay() {
         return this.weekDay;
     }
 
-    public void setWeekDay(Short weekDay) {
-        this.weekDay = weekDay;
-    }
-
-    @Basic
-    @Column(name = "start_time")
     public Time getStartTime() {
         return this.startTime;
     }
 
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
-    }
-
-    @Basic
-    @Column(name = "end_time")
     public Time getEndTime() {
         return this.endTime;
     }
 
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-    }
-
-    @Basic
-    @Column(name = "inversed")
     public boolean getInversed() {
         return this.inversed;
-    }
-
-    public void setInversed(boolean inversed) {
-        this.inversed = inversed;
     }
 
 }

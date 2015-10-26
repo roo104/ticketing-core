@@ -22,9 +22,9 @@ public class OtpService {
 
     public void requestOtp(IvsRequestOtpVO ivsRequestOtpVO) {
         String ivsDefaultMessageText = "";
-        Integer ivsContextId = ivsRequestOtpVO.getApplication().getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
-        String ivsSenderName = ivsRequestOtpVO.getApplication().getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
-        String ivsMessageText = ivsRequestOtpVO.getApplication().getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT, ivsDefaultMessageText);
+        Integer ivsContextId = ivsRequestOtpVO.getApplication().getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
+        String ivsSenderName = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
+        String ivsMessageText = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey(), ivsDefaultMessageText);
 
         validateProperties(ivsRequestOtpVO, ivsContextId, ivsSenderName);
 

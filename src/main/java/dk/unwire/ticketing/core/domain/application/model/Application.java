@@ -1,16 +1,13 @@
 package dk.unwire.ticketing.core.domain.application.model;
 
-import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import dk.unwire.ticketing.core.common.model.Property;
+import dk.unwire.ticketing.core.common.model.PropertyMap;
 
 import javax.persistence.*;
-import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class Application {
-    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+public class Application extends PropertyMap<ApplicationProperty> {
 
     @Id
     @Column(name = "id")
@@ -91,13 +88,20 @@ public class Application {
     @Column(name = "account_source")
     private String accountSource;
 
+    @Override
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", referencedColumnName = "id")
     @MapKeyColumn(name = "name")
-    private Map<String, ApplicationProperty> applicationProperties;
+    protected Map<String, Property> getProperties() {
+        return super.getProperties();
+    }
 
     public Application() {
-        this.applicationProperties = new HashMap<>();
+
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public long getShortcode() {
@@ -200,87 +204,4 @@ public class Application {
         return this.accountSource;
     }
 
-    public Map<String, ApplicationProperty> getApplicationProperties() {
-        return this.applicationProperties;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-
-    protected void setApplicationProperties(Map<String, ApplicationProperty> applicationProperties) {
-        this.applicationProperties = applicationProperties;
-    }
-
-    /**
-     * Get Application property as string.
-     *
-     * @param keyName Key used to get value from map
-     * @return If value is empty null will be returned.
-     */
-    public String getStringApplicationProperty(ApplicationPropertyKey keyName) {
-        String result = null;
-        ApplicationProperty property = this.applicationProperties.get(keyName.getPropertyKey());
-        if (property != null) {
-            result = property.getValue();
-        }
-        return result;
-    }
-
-    /**
-     * Get Application property as string.
-     *
-     * @param keyName      Key used to get value from map
-     * @param defaultValue
-     * @return If value is empty defaultValue will be returned.
-     */
-    public String getStringApplicationProperty(ApplicationPropertyKey keyName, String defaultValue) {
-        String result = defaultValue;
-        ApplicationProperty property = this.applicationProperties.get(keyName.getPropertyKey());
-        if (property != null) {
-            result = property.getValue();
-        }
-        return result;
-    }
-
-    /**
-     * Get Application property as Integer.
-     *
-     * @param keyName Key used to get value from map
-     * @return Return type is Integer. If value is empty null will be returned.
-     */
-    public Integer getIntApplicationProperty(ApplicationPropertyKey keyName) {
-        Integer result = null;
-        ApplicationProperty property = this.applicationProperties.get(keyName.getPropertyKey());
-        if (property != null) {
-            try {
-                result = Integer.parseInt(property.getValue());
-            } catch (NumberFormatException e) {
-                logger.debug("Could not parse ApplicationProperty with key [{}] and value [{}] to integer", property.getName(), property.getValue());
-            }
-
-        }
-        return result;
-    }
-
-    /**
-     * Get Application property as Integer.
-     *
-     * @param keyName      Key used to get value from map
-     * @param defaultValue
-     * @return Return type is Integer. If value is empty defaultValue will be returned.
-     */
-    public Integer getIntApplicationProperty(ApplicationPropertyKey keyName, int defaultValue) {
-        Integer result = defaultValue;
-        ApplicationProperty property = this.applicationProperties.get(keyName.getPropertyKey());
-        if (property != null) {
-            try {
-                result = Integer.parseInt(property.getValue());
-            } catch (NumberFormatException e) {
-                logger.debug("Could not parse ApplicationProperty with key [{}] and value [{}] to integer", property.getName(), property.getValue());
-            }
-        }
-        return result;
-    }
 }

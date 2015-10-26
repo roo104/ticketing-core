@@ -12,6 +12,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TicketingCoreApplication.class)
@@ -30,10 +31,12 @@ public class ProductRepositoryIT {
     @Test
     public void insertProduct() {
         Product product = new Product();
+        product.addProductProperty("prop1", "val1");
 
         this.productRepository.save(product);
 
         Product savedProduct = this.productRepository.findOne(product.getId());
         assertNotNull(savedProduct);
+        assertTrue(savedProduct.getProductProperties().size() >= 1);
     }
 }

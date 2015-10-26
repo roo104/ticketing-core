@@ -1,6 +1,7 @@
 package dk.unwire.ticketing.core.domain.product.model;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -44,10 +45,10 @@ public class Product {
     @Basic
     @Column(name = "vat")
     private String vat;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Collection<ProductProperty> productProperties;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Collection<InvalidBuyTime> invalidBuyTimes;
 
@@ -100,7 +101,25 @@ public class Product {
         return false;
     }
 
+    public Collection<InvalidBuyTime> getInvalidBuyTimes() {
+        return this.invalidBuyTimes;
+    }
+
+    public Collection<ProductProperty> getProductProperties() {
+        return this.productProperties;
+    }
+
     public void addProductProperty(String name, String value) {
         this.productProperties.add(new ProductProperty(name, value));
+    }
+
+    public boolean canBeBought(ZonedDateTime buyTime) {
+
+        return true;
+
+    }
+
+    public boolean canBeActivated(ZonedDateTime buyTime) {
+        return true;
     }
 }
