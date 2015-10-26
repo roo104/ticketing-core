@@ -3,13 +3,18 @@ package dk.unwire.ticketing.core.common.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Embeddable
 public class PropertyMap<T extends Property> {
 
     private static final Logger logger = LoggerFactory.getLogger(PropertyMap.class);
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id")
+    @MapKeyColumn(name = "name")
     protected final Map<String, T> properties;
 
     protected PropertyMap() {
@@ -21,7 +26,7 @@ public class PropertyMap<T extends Property> {
     }
 
     public void addProperty(T property) {
-        this.properties.put(property);
+        this.properties.put(property.getName(), property);
     }
 
     /**

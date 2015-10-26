@@ -1,10 +1,11 @@
 package dk.unwire.ticketing.core.domain.application.model;
 
-import dk.unwire.ticketing.core.common.model.Property;
 import dk.unwire.ticketing.core.common.model.PropertyMap;
 
-import javax.persistence.*;
-import java.util.Map;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Application extends PropertyMap<ApplicationProperty> {
@@ -88,16 +89,7 @@ public class Application extends PropertyMap<ApplicationProperty> {
     @Column(name = "account_source")
     private String accountSource;
 
-    @Override
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "application_id", referencedColumnName = "id")
-    @MapKeyColumn(name = "name")
-    protected Map<String, Property> getProperties() {
-        return super.getProperties();
-    }
-
     public Application() {
-
     }
 
     public int getId() {

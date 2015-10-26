@@ -9,6 +9,9 @@ import javax.persistence.Table;
 @Table(name = "application_property")
 public final class ApplicationProperty extends Property {
 
+    public ApplicationProperty() {
+    }
+
     public ApplicationProperty(String name, String value) {
         super(name, value);
     }

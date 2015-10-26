@@ -1,12 +1,14 @@
 package dk.unwire.ticketing.core.domain.product.model;
 
+import dk.unwire.ticketing.core.common.model.PropertyMap;
+
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
-public class Product {
+public class Product extends PropertyMap<ProductProperty> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,13 +49,10 @@ public class Product {
     private String vat;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Collection<ProductProperty> productProperties;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Collection<InvalidBuyTime> invalidBuyTimes;
 
+
     public Product() {
-        this.productProperties = new HashSet<>();
         this.invalidBuyTimes = new HashSet<>();
     }
 
@@ -105,18 +104,16 @@ public class Product {
         return this.invalidBuyTimes;
     }
 
-    public Collection<ProductProperty> getProductProperties() {
-        return this.productProperties;
-    }
-
-    public void addProductProperty(String name, String value) {
-        this.productProperties.add(new ProductProperty(name, value));
-    }
+//    public Map<String, ProductProperty> getProductProperties() {
+//        return this.productProperties;
+//    }
+//
+//    public void addProductProperty(String name, String value) {
+//        this.productProperties.put(name, new ProductProperty(name, value));
+//    }
 
     public boolean canBeBought(ZonedDateTime buyTime) {
-
         return true;
-
     }
 
     public boolean canBeActivated(ZonedDateTime buyTime) {
