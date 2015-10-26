@@ -3,8 +3,8 @@ package dk.unwire.ticketing.core.domain.account.service;
 import dk.unwire.ticketing.core.TicketingCoreApplication;
 import dk.unwire.ticketing.core.domain.account.model.AccountIdentifier;
 import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
+import dk.unwire.ticketing.core.domain.otp.model.OtpConfirmRequestVO;
 import dk.unwire.ticketing.core.domain.otp.rest.model.confirm.OtpConfirmRequest;
-import dk.unwire.ticketing.core.domain.otp.rest.model.confirm.OtpConfirmRequestVO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +34,8 @@ public class AccountServiceTest {
     @Before
     public void setUp() {
         OtpConfirmRequest otpConfirmRequest = new OtpConfirmRequest(MSISDN, OTP);
-        OtpConfirmRequestVO otpConfirmRequestVO = new OtpConfirmRequestVO(otpConfirmRequest, APPLICATION_ID);
+
+        OtpConfirmRequestVO otpConfirmRequestVO = otpConfirmRequest.generateOtpConfirmRequestVO(APPLICATION_ID);
         this.findOrCreateAccountVO = FindOrCreateAccountVO.fromOtpConfirmRequestVO(otpConfirmRequestVO);
     }
 

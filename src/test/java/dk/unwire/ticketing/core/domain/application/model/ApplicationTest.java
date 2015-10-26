@@ -38,6 +38,17 @@ public class ApplicationTest {
     }
 
     @Test
+    public void getStringApplicationPropertyWithDefaultShouldNotReturnDefaultValue() {
+        //given
+        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME);
+        this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
+        //when
+        String result = this.classUnderTest.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME,DEFAULT_STRING_VALUE);
+        //then
+        assertEquals(IVS_SENDER_NAME, result);
+    }
+
+    @Test
     public void getStringApplicationPropertyThatIsEmptyShouldReturnNull() {
         //when
         String result = this.classUnderTest.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT);
@@ -55,6 +66,18 @@ public class ApplicationTest {
 
     @Test
     public void getIntApplicationProperty() {
+        //given
+        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), IVS_CONTEXT_ID);
+
+        this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), this.testApplicationProperty);
+        //when
+        int result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
+        //then
+        assertEquals(IVS_CONTEXT_ID_AS_INTEGER, result);
+    }
+
+    @Test
+    public void getIntApplicationPropertyWithDefaultShouldNotReturnDefault() {
         //given
         this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), IVS_CONTEXT_ID);
 
@@ -84,6 +107,7 @@ public class ApplicationTest {
     @Test
     public void getIntApplicationPropertyNotAnInteger() {
         //given
+        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME);
         this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
         //when
         Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);

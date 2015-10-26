@@ -21,7 +21,8 @@ public final class AccountIdentifier {
     protected String identifier;
     @Getter
     @Column(name = "identifier_type")
-    private int identifierType;
+    @Enumerated(EnumType.ORDINAL)
+    private IdentifierType identifierType;
     @Getter
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
@@ -32,7 +33,7 @@ public final class AccountIdentifier {
         this.applicationId = applicationId;
         this.identifier = identifier;
         this.account = account;
-        this.identifierType = identifierType.getId();
+        this.identifierType = identifierType;
     }
 
 }

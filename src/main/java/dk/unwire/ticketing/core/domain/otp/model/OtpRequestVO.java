@@ -1,4 +1,4 @@
-package dk.unwire.ticketing.core.domain.otp.rest.model.register;
+package dk.unwire.ticketing.core.domain.otp.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

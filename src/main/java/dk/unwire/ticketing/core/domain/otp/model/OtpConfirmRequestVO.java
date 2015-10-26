@@ -1,4 +1,4 @@
-package dk.unwire.ticketing.core.domain.otp.rest.model.confirm;
+package dk.unwire.ticketing.core.domain.otp.model;
 
 import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
 import lombok.Getter;
@@ -13,9 +13,9 @@ public final class OtpConfirmRequestVO {
     @Getter
     private final IdentifierType identifierType;
 
-    public OtpConfirmRequestVO(OtpConfirmRequest otpConfirmRequest, int applicationId) {
-        this.otp = otpConfirmRequest.getOtp();
-        this.identifier = otpConfirmRequest.getMsisdn();
+    public OtpConfirmRequestVO(String otp, String identifier, int applicationId) {
+        this.otp = otp;
+        this.identifier = identifier;
         this.applicationId = applicationId;
         this.identifierType = IdentifierType.MSISDN;
     }

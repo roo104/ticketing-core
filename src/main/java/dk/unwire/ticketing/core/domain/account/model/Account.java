@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +52,7 @@ public final class Account {
         this.accountIdentifiers = new ArrayList<>();
         this.applicationId = findOrCreateAccountVO.getApplicationId();
         this.successfulPurchases = ZERO_PURCHASES;
-//        this.created = ZonedDateTime.now(ZoneOffset.UTC);
+        this.created = ZonedDateTime.now(ZoneOffset.UTC);
 
         AccountIdentifier accountIdentifier = AccountIdentifier.builder()
                 .applicationId(this.applicationId)
@@ -62,7 +63,7 @@ public final class Account {
         addAccountIdentifier(accountIdentifier);
     }
 
-    public static Account fromFindOrCreateAccountVO(FindOrCreateAccountVO findOrCreateAccountVO) {
+    public static Account FindOrCreateAccount(FindOrCreateAccountVO findOrCreateAccountVO) {
 
         return new Account(findOrCreateAccountVO);
     }
@@ -96,7 +97,6 @@ public final class Account {
         if (identifier != null) {
             identifierValue = identifier.getIdentifier();
         }
-
         return identifierValue;
     }
 
@@ -106,7 +106,7 @@ public final class Account {
             Iterator<AccountIdentifier> iterator = this.accountIdentifiers.iterator();
             while (iterator.hasNext()) {
                 AccountIdentifier identifier = iterator.next();
-                if (identifier.getAccount().getId() == this.id && identifier.getIdentifierType() == type.getId()) {
+                if (identifier.getAccount().getId() == this.id && identifier.getIdentifierType() == type) {
                     accountIdentifier = identifier;
                     break;
                 }

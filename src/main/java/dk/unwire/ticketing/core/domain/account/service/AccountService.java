@@ -21,10 +21,10 @@ public class AccountService {
         IdentifierType identifierType = findOrCreateAccountVO.getIdentifierType();
         int applicationId = findOrCreateAccountVO.getApplicationId();
 
-        AccountIdentifier accountIdentifier = this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(identifier, identifierType.getId(), applicationId);
+        AccountIdentifier accountIdentifier = this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(identifier, identifierType, applicationId);
 
         if (accountIdentifier == null) {
-            Account account = Account.fromFindOrCreateAccountVO(findOrCreateAccountVO);
+            Account account = Account.FindOrCreateAccount(findOrCreateAccountVO);
             this.accountRepository.save(account);
             accountIdentifier = account.getAccountIdentifier(identifierType);
         }

@@ -70,7 +70,7 @@ public class OtpServiceTest {
     private void createTestData() {
 
         this.testIvsRequestOtpVO = IvsRequestOtpVO.builder()
-                .systemProperty(this.testIvsBaseUrl)
+                .baseUrl(this.testIvsBaseUrl.getValue())
                 .msisdn(this.TEST_MSISDN)
                 .application(this.testApplication)
                 .build();
@@ -78,7 +78,8 @@ public class OtpServiceTest {
                 .otp(TEST_OTP)
                 .application(this.testApplication)
                 .msisdn(this.TEST_MSISDN)
-                .systemProperty(this.testIvsBaseUrl)
+
+                .baseUrl(this.testIvsBaseUrl.getValue())
                 .build();
     }
 
