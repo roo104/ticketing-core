@@ -27,11 +27,13 @@ public class OtpService {
         int applicationId = ivsRequestOtpVO.getApplication().getId();
         Integer ivsContextId = ivsRequestOtpVO.getApplication().getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey());
         String ivsSenderName = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
-        String ivsMessageText = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey(), ivsDefaultMessageText);
+        String ivsMessageText = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey(),
+                ivsDefaultMessageText);
 
         ivsRequestOtpVO.validateProperties(ivsSenderName, ivsContextId);
 
-        logger.debug("Received application properties for application with id [{}] ivs.context.id = [{}] ivs.sender.name = [{}]", applicationId, ivsContextId, ivsSenderName);
+        logger.debug("Received application properties for application with id [{}] ivs.context.id = [{}] ivs.sender.name = [{}]",
+                applicationId, ivsContextId, ivsSenderName);
 
         String url = String.format("%s/context/%d/validation/identity/%s", ivsRequestOtpVO.getBaseUrl(), ivsContextId, ivsRequestOtpVO.getMsisdn());
         IvsRequestOtp ivsRequestOTP = new IvsRequestOtp(ivsSenderName, ivsMessageText);

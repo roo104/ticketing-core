@@ -1,5 +1,6 @@
 package dk.unwire.ticketing.core.domain.otp.rest;
 
+import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.account.model.AccountIdentifier;
 import dk.unwire.ticketing.core.domain.otp.application.OtpApplication;
 import dk.unwire.ticketing.core.domain.otp.rest.model.confirm.OtpConfirmRequest;
@@ -32,7 +33,8 @@ public class OtpController {
     public ResponseEntity<OtpConfirmResponse> confirmOtp(@PathVariable int applicationId, @RequestBody @Valid OtpConfirmRequest otpConfirmRequest) {
         AccountIdentifier accountIdentifier = this.otpApplication.confirmOtp(otpConfirmRequest.generateOtpConfirmRequestVO(applicationId));
 
-        OtpConfirmResponseVO otpConfirmResponseVO = new OtpConfirmResponseVO(accountIdentifier.getIdentifier(), accountIdentifier.getAccount().getId());
+        Account account = accountIdentifier.getAccount();
+        OtpConfirmResponseVO otpConfirmResponseVO = new OtpConfirmResponseVO(accountIdentifier.getIdentifier(), account.getId());
         GenericResponseInfo responseInfo = GenericResponseInfo.OK;
         OtpConfirmResponse response = new OtpConfirmResponse(responseInfo, otpConfirmResponseVO);
 

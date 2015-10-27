@@ -23,7 +23,8 @@ public final class IvsRequestConfirmOtpVO {
 
     public void validateProperties(Integer ivsContextId) {
         if (ivsContextId == null) {
-            logger.error("Application with id {} is missing Application property {}", this.application.getId(), ApplicationPropertyKey.IVS_CONTEXT_ID.getKey());
+            logger.error("Application with id {} is missing Application property {}", this.application.getId(),
+                    ApplicationPropertyKey.IVS_CONTEXT_ID.getKey());
             throw new ApplicationPropertyException("IVS contextId not defined in application properties");
         }
     }
