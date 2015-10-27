@@ -24,6 +24,7 @@ public class OtpService {
 
     public void requestOtp(IvsRequestOtpVO ivsRequestOtpVO) {
         String ivsDefaultMessageText = "";
+        int applicationId = ivsRequestOtpVO.getApplication().getId();
         Integer ivsContextId = ivsRequestOtpVO.getApplication().getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
         String ivsSenderName = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
         String ivsMessageText = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey(), ivsDefaultMessageText);
@@ -44,7 +45,7 @@ public class OtpService {
     }
 
     public void confirmOtp(IvsRequestConfirmOtpVO ivsRequestConfirmOtpVO) {
-        Integer ivsContextId = ivsRequestConfirmOtpVO.getApplication().getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
+        Integer ivsContextId = ivsRequestConfirmOtpVO.getApplication().getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
         ivsRequestConfirmOtpVO.validateProperties(ivsContextId);
         String url = String.format("%s/context/%d/confirmation/", ivsRequestConfirmOtpVO.getBaseUrl(), ivsContextId);
         IvsRequestConfirmOtp ivsRequestConfirmOtp = new IvsRequestConfirmOtp(ivsRequestConfirmOtpVO);

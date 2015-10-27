@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 
 @Builder
 public final class IvsRequestOtpVO {
+
+    private static final Logger logger = LoggerFactory.getLogger(IvsRequestOtpVO.class);
+
     @Getter
     private final Application application;
     @Getter
@@ -17,23 +20,23 @@ public final class IvsRequestOtpVO {
     @Getter
     private final String baseUrl;
 
-    private static final Logger logger = LoggerFactory.getLogger(IvsRequestOtpVO.class);
-
     public void validateProperties(String ivsSenderName, Integer ivsContextId) {
-        validateIvsContextIdProperty(this.application.getId(), ivsContextId);
-        validateIvsSenderProperty(this.application.getId(), ivsSenderName);
+        validateIvsContextIdProperty(ivsContextId);
+        validateIvsSenderProperty(ivsSenderName);
     }
 
-    private void validateIvsContextIdProperty(int applicationId, Integer ivsContextId) {
+    private void validateIvsContextIdProperty(Integer ivsContextId) {
         if (ivsContextId == null) {
-            logger.error("Application with id {} is missing Application property {}", applicationId, ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
+            logger.error("Application with id {} is missing Application property {}", this.application.getId(),
+                    ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
             throw new ApplicationPropertyException("IVS contextId not defined in application properties");
         }
     }
 
-    private void validateIvsSenderProperty(int applicationId, String ivsSenderName) {
+    private void validateIvsSenderProperty(String ivsSenderName) {
         if (ivsSenderName == null) {
-            logger.error("Application with id {} is missing Application property {}", applicationId, ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
+            logger.error("Application with id {} is missing Application property {}", this.application.getId(),
+                    ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
             throw new ApplicationPropertyException("IVS Sender not defined in application properties");
         }
     }
