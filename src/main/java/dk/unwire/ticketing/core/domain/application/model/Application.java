@@ -112,10 +112,6 @@ public class Application {
     @Column(name = "serialcode_prefix")
     @Getter
     private String serialcodePrefix;
-    @Basic
-    @Column(name = "account_source")
-    @Getter
-    private String accountSource;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", referencedColumnName = "id")
     @MapKeyColumn(name = "name")
@@ -194,7 +190,7 @@ public class Application {
             try {
                 result = Integer.parseInt(property.getValue());
             } catch (NumberFormatException e) {
-                logger.debug("Could not parse ApplicationProperty with key [{}] and value [{}] to integer - Using provided default value {}", property.getName(), property.getValue(), defaultValue);
+                logger.debug("Could not parse ApplicationProperty with key [{}] and value [{}] to integer - Using provided default value [{}]", property.getName(), property.getValue(), defaultValue);
             }
         }
         return result;

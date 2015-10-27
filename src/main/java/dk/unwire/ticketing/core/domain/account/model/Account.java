@@ -63,7 +63,7 @@ public final class Account {
         addAccountIdentifier(accountIdentifier);
     }
 
-    public static Account FindOrCreateAccount(FindOrCreateAccountVO findOrCreateAccountVO) {
+    public static Account findOrCreateAccount(FindOrCreateAccountVO findOrCreateAccountVO) {
 
         return new Account(findOrCreateAccountVO);
     }

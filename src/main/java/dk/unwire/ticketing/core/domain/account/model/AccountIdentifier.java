@@ -1,14 +1,16 @@
 package dk.unwire.ticketing.core.domain.account.model;
 
 import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
-import lombok.Builder;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 
 @Entity
 @Table(name = "account_identifier")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AccountIdentifier {
     @Id
     @Column(name = "id")
@@ -28,12 +30,48 @@ public final class AccountIdentifier {
     @JoinColumn(referencedColumnName = "id")
     private Account account;
 
-    @Builder
-    public AccountIdentifier(int applicationId, String identifier, Account account, IdentifierType identifierType) {
-        this.applicationId = applicationId;
-        this.identifier = identifier;
-        this.account = account;
-        this.identifierType = identifierType;
+    private AccountIdentifier(Builder builder) {
+        this.applicationId = builder.applicationId;
+        this.identifier = builder.identifier;
+        this.identifierType = builder.identifierType;
+        this.account = builder.account;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private int applicationId;
+        private String identifier;
+        private IdentifierType identifierType;
+        private Account account;
+
+        private Builder() {
+        }
+
+        public Builder applicationId(int applicationId) {
+            this.applicationId = applicationId;
+            return this;
+        }
+
+        public Builder identifier(String identifier) {
+            this.identifier = identifier;
+            return this;
+        }
+
+        public Builder identifierType(IdentifierType identifierType) {
+            this.identifierType = identifierType;
+            return this;
+        }
+
+        public Builder account(Account account) {
+            this.account = account;
+            return this;
+        }
+
+        public AccountIdentifier build() {
+            return new AccountIdentifier(this);
+        }
+    }
 }

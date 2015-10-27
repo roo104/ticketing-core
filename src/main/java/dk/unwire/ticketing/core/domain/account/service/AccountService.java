@@ -24,7 +24,7 @@ public class AccountService {
         AccountIdentifier accountIdentifier = this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(identifier, identifierType, applicationId);
 
         if (accountIdentifier == null) {
-            Account account = Account.FindOrCreateAccount(findOrCreateAccountVO);
+            Account account = Account.findOrCreateAccount(findOrCreateAccountVO);
             this.accountRepository.save(account);
             accountIdentifier = account.getAccountIdentifier(identifierType);
         }

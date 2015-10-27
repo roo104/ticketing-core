@@ -1,48 +1,72 @@
 package dk.unwire.ticketing.core.domain.account.service;
 
-import dk.unwire.ticketing.core.TicketingCoreApplication;
+import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
+import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.account.model.AccountIdentifier;
 import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
+import dk.unwire.ticketing.core.domain.account.repository.AccountIdentifierRepository;
+import dk.unwire.ticketing.core.domain.account.repository.AccountRepository;
 import dk.unwire.ticketing.core.domain.otp.model.OtpConfirmRequestVO;
 import dk.unwire.ticketing.core.domain.otp.rest.model.confirm.OtpConfirmRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
-
-import javax.transaction.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static junit.framework.Assert.assertNotNull;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = TicketingCoreApplication.class)
-@TransactionConfiguration(defaultRollback = true)
-@WebAppConfiguration
-@Transactional
+@RunWith(MockitoJUnitRunner.class)
 public class AccountServiceTest {
-    public static final String MSISDN = "4511111111";
-    public static final String OTP = "1234";
-    public static final int APPLICATION_ID = 1;
+    private static final String MSISDN = "4511111111";
+    private static final String OTP = "1234";
+    private static final int APPLICATION_ID = 1;
     private FindOrCreateAccountVO findOrCreateAccountVO;
-    @Autowired
+    @InjectMocks
     private AccountService classUnderTest;
+    @Mock
+    private AccountRepository accountRepository;
+    @Mock
+    private AccountIdentifierRepository accountIdentifierRepository;
+    private AccountIdentifier accountIdentifier;
 
     @Before
     public void setUp() {
         OtpConfirmRequest otpConfirmRequest = new OtpConfirmRequest(MSISDN, OTP);
-
         OtpConfirmRequestVO otpConfirmRequestVO = otpConfirmRequest.generateOtpConfirmRequestVO(APPLICATION_ID);
         this.findOrCreateAccountVO = FindOrCreateAccountVO.fromOtpConfirmRequestVO(otpConfirmRequestVO);
+        this.accountIdentifier = AccountIdentifier.builder()
+                .identifier(MSISDN)
+                .applicationId(APPLICATION_ID)
+                .build();
     }
 
     @Test
-    public void insertAccountAndAccountIdentifier() {
-        AccountIdentifier orCreateAccount = this.classUnderTest.findOrCreateAccount(this.findOrCreateAccountVO);
-        assertNotNull(orCreateAccount);
+    public void accountIdentifierNotFoundCreateAccountAndAccountIdentifier() {
+        //given
+        given(this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(anyString(), any(IdentifierType.class), anyInt())).willReturn(null);
+        //when
+        AccountIdentifier accountIdentifier = this.classUnderTest.findOrCreateAccount(this.findOrCreateAccountVO);
+        //then
+        assertNotNull(accountIdentifier);
+        verify(this.accountRepository, times(1)).save(any(Account.class));
+    }
+
+    @Test
+    public void findAccountFromIdentifierShouldReturnAccountIdentifier() {
+        //given
+        given(this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(anyString(), any(IdentifierType.class), anyInt())).willReturn(this.accountIdentifier);
+        //when
+        AccountIdentifier accountIdentifier = this.classUnderTest.findOrCreateAccount(this.findOrCreateAccountVO);
+        //then
+        assertNotNull(accountIdentifier);
+        verify(this.accountRepository, never()).save(any(Account.class));
     }
 
 }

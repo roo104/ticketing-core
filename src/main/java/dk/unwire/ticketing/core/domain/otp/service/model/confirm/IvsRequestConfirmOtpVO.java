@@ -22,13 +22,10 @@ public final class IvsRequestConfirmOtpVO {
     private static final Logger logger = LoggerFactory.getLogger(IvsRequestConfirmOtpVO.class);
 
     public void validateProperties(Integer ivsContextId) {
-        validateIvsContextIdProperty(this.application.getId(), ivsContextId);
-    }
-
-    private void validateIvsContextIdProperty(int applicationId, Integer ivsContextId) {
         if (ivsContextId == null) {
-            logger.error("Application with id {} is missing Application property {}", applicationId, ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
+            logger.error("Application with id {} is missing Application property {}", this.application.getId(), ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
             throw new ApplicationPropertyException("IVS contextId not defined in application properties");
         }
     }
+
 }
