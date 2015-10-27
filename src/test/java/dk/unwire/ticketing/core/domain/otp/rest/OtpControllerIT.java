@@ -1,8 +1,11 @@
 package dk.unwire.ticketing.core.domain.otp.rest;
 
+import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import dk.unwire.ticketing.core.TicketingCoreApplication;
+import dk.unwire.ticketing.core.domain.otp.OtpConstants;
 import dk.unwire.ticketing.spring.rest.config.filter.requestid.RequestIdFilter;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +32,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @WebAppConfiguration
 @Transactional
 public class OtpControllerIT {
-
+    @ClassRule
+    public static WireMockClassRule wireMockRule = new WireMockClassRule(OtpConstants.WIREMOCK_PORT);
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -42,11 +46,13 @@ public class OtpControllerIT {
         this.mockMvc = webAppContextSetup(this.webApplicationContext).addFilter(this.requestIdFilter).build();
         this.httpHeaders = new HttpHeaders();
         this.httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+
     }
 
     /**
      * Can be used to test integration against the external IVS. Should always be disabled
      * and only run manually as IVS points to Production Gateway
+     *
      * @throws Exception
      */
     @Ignore
