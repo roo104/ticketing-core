@@ -2,6 +2,9 @@ package dk.unwire.ticketing.core.common.model;
 
 import javax.persistence.*;
 
+/**
+ * The class can be extended when you need a simple name/value property class.
+ */
 @MappedSuperclass
 public abstract class Property {
 

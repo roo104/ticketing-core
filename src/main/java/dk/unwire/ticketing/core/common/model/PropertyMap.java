@@ -7,6 +7,14 @@ import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Extending this class will provide a Map of properties and a long list of helper methods to retrieve property values as int and string.
+ * To set the correct DB mapping add an annotation to the top of the class like:
+ * @AssociationOverride(name = "properties", joinColumns = @JoinColumn(name = "your_referring_id", referencedColumnName = "id"))
+ * Change "your_referring_id" to the name of the column on the property table.
+ * For application_property table, "your_referring_id" will be "application_id".
+ * @param <T> Class who extends Property
+ */
 @MappedSuperclass
 public class PropertyMap<T extends Property> {
 
@@ -21,12 +29,19 @@ public class PropertyMap<T extends Property> {
         this.properties = new HashMap<>();
     }
 
-    protected Map<String, T> getProperties() {
-        return this.properties;
+    /**
+     * Use this to overwritten the default HashMap type.
+     */
+    protected PropertyMap(Map<String, T> map) {
+        this.properties = map;
     }
 
     public void addProperty(T property) {
         this.properties.put(property.getName(), property);
+    }
+
+    public void removeProperty(T property) {
+        this.properties.remove(property.getName(), property);
     }
 
     /**
