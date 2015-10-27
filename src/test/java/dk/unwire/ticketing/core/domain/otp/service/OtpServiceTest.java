@@ -5,10 +5,15 @@ import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationPropertyException;
 import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.otp.OtpConstants;
-import dk.unwire.ticketing.core.domain.otp.exception.IvsErrorException;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
+import dk.unwire.ticketing.core.domain.otp.enums.OtpResponseInfo;
+import dk.unwire.ticketing.core.domain.otp.exception.IvsConfirmOtpErrorException;
+import dk.unwire.ticketing.core.domain.otp.exception.IvsRequestOtpErrorException;
+import dk.unwire.ticketing.core.domain.otp.service.model.confirm.IvsRequestConfirmOtpVO;
+import dk.unwire.ticketing.core.domain.otp.service.model.register.IvsRequestOtpVO;
 import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperty;
 import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperyFactory;
+import dk.unwire.ticketing.spring.rest.common.response.ResponseInfo;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -17,23 +22,25 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static dk.unwire.ticketing.core.domain.otp.OtpConstants.IVS_CONFIRM_RESOURCE;
 import static dk.unwire.ticketing.core.domain.otp.OtpConstants.IVS_REQUEST_RESOURCE;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OtpServiceTest {
-
     @ClassRule
     public static WireMockClassRule wireMockRule = new WireMockClassRule(OtpConstants.WIREMOCK_PORT);
     private static final Integer IVS_CONTEXT_ID = 1;
+    private static final String TEST_OTP = "1234";
     private static final String IVS_SENDER_NAME = "Unwire";
     private static final String IVS_MESSAGE_TEXT = "otp is:";
-    private final long TEST_MSISDN = 12345678;
+    private final String TEST_MSISDN = "12345678";
     private OtpService classUnderTest;
     private Application testApplication;
     private final SystemProperty testIvsBaseUrl = SystemProperyFactory.getTestSystemProperty();
     private IvsRequestOtpVO testIvsRequestOtpVO;
+    private IvsRequestConfirmOtpVO ivsRequestConfirmOtpVO;
 
     @Before
     public void setUp() {
@@ -41,39 +48,53 @@ public class OtpServiceTest {
         this.testApplication = mock(Application.class);
 
         createTestData();
+        setupRestMocks();
+
+        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT)).willReturn(IVS_MESSAGE_TEXT);
+        given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(IVS_CONTEXT_ID);
+        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME)).willReturn(IVS_SENDER_NAME);
+    }
+
+    private void setupRestMocks() {
         wireMockRule.givenThat(post(urlEqualTo(IVS_REQUEST_RESOURCE))
                 .willReturn(aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withBody("bc4bbdd9-4e9e-4ebf-83bb-0d411a8ca33d")));
 
-        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey())).willReturn(IVS_MESSAGE_TEXT);
-        given(this.testApplication.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey())).willReturn(IVS_CONTEXT_ID);
-        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey())).willReturn(IVS_SENDER_NAME);
+        wireMockRule.givenThat(post(urlEqualTo(IVS_CONFIRM_RESOURCE))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withBody("true")));
     }
 
     private void createTestData() {
 
-        this.testIvsRequestOtpVO = IvsRequestOtpVO.newBuilder()
-                .withSystemProperty(this.testIvsBaseUrl)
-                .withMsisdn(this.TEST_MSISDN)
-                .withApplication(this.testApplication)
+        this.testIvsRequestOtpVO = IvsRequestOtpVO.builder()
+                .baseUrl(this.testIvsBaseUrl.getValue())
+                .msisdn(this.TEST_MSISDN)
+                .application(this.testApplication)
+                .build();
+        this.ivsRequestConfirmOtpVO = IvsRequestConfirmOtpVO.builder()
+                .otp(TEST_OTP)
+                .application(this.testApplication)
+                .msisdn(this.TEST_MSISDN)
+
+                .baseUrl(this.testIvsBaseUrl.getValue())
                 .build();
     }
 
     @Test(expected = ApplicationPropertyException.class)
     public void missingApplicationPropertyIvsContextIdShouldFail() {
         //given
-        given(this.testApplication.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey())).willReturn(null);
+        given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(null);
         //when
         this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
-
-
     }
 
     @Test(expected = ApplicationPropertyException.class)
     public void missingApplicationPropertyIvsSenderNameShouldFail() {
         //given
-        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey())).willReturn(null);
+        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME)).willReturn(null);
         //when
         this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
     }
@@ -81,7 +102,7 @@ public class OtpServiceTest {
     @Test
     public void missingIvsMessageTextShouldReturnOk() {
         //given
-        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey())).willReturn(null);
+        given(this.testApplication.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT)).willReturn(null);
         // when
         this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
         //then
@@ -98,45 +119,132 @@ public class OtpServiceTest {
                 .withHeader("Content-Type", equalTo("application/json")));
     }
 
-    @Test(expected = IvsErrorException.class)
+    @Test(expected = ApplicationPropertyException.class)
+    public void confirmMissingApplicationPropertyIvsContextIdShouldFail() {
+        //given
+        given(this.testApplication.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID)).willReturn(null);
+        //when
+        this.classUnderTest.confirmOtp(this.ivsRequestConfirmOtpVO);
+    }
+
+    @Test
     public void requestReturnsBadRequestShouldFail() {
+        OtpResponseInfo result = null;
         //given
         wireMockRule.givenThat(post(urlEqualTo(IVS_REQUEST_RESOURCE))
                 .willReturn(aResponse()
                         .withStatus(HttpStatus.BAD_REQUEST.value())));
         //when
-        this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
+        try {
+            this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
+
+        } catch (IvsRequestOtpErrorException e) {
+            result = e.getOtpResponseInfo();
+        }
         //then
-        verify(postRequestedFor(urlEqualTo("/context/1/validation/identity/12345678"))
-                .withHeader("Content-Type", equalTo("application/json")));
+        Assert.assertEquals(OtpResponseInfo.OTP_REQUEST_DEFAULT_ERROR, result);
+
     }
 
-    @Test(expected = IvsErrorException.class)
+    @Test
     public void requestUserBlocked() {
+        OtpResponseInfo result = null;
         //given
         wireMockRule.givenThat(post(urlEqualTo(IVS_REQUEST_RESOURCE))
                 .willReturn(aResponse()
                         .withStatus(HttpStatus.FORBIDDEN.value())));
         //when
-        this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
+        try {
+            this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
+
+        } catch (IvsRequestOtpErrorException e) {
+            result = e.getOtpResponseInfo();
+        }
         //then
-        verify(postRequestedFor(urlEqualTo("/context/1/validation/identity/12345678"))
-                .withHeader("Content-Type", equalTo("application/json")));
+        Assert.assertEquals(OtpResponseInfo.OTP_MSISDN_BLOCKED, result);
+
     }
 
-    @Test(expected = IvsErrorException.class)
+    @Test
     public void requestIvsInternalServerErrorShouldFail() {
+        OtpResponseInfo result = null;
         //given
         wireMockRule.givenThat(post(urlEqualTo(IVS_REQUEST_RESOURCE))
                 .willReturn(aResponse()
                         .withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())));
         //when
-        this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
+        try {
+            this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
+
+        } catch (IvsRequestOtpErrorException e) {
+            result = e.getOtpResponseInfo();
+        }
         //then
-        verify(postRequestedFor(urlEqualTo("/context/1/validation/identity/12345678"))
-                .withHeader("Content-Type", equalTo("application/json")));
+        Assert.assertEquals(OtpResponseInfo.OTP_REQUEST_SMS_NOT_SENT, result);
     }
 
+
+    @Test
+    public void confirmIvsAllOk() {
+        //when
+        this.classUnderTest.confirmOtp(this.ivsRequestConfirmOtpVO);
+        //then
+        verify(postRequestedFor(urlEqualTo("/context/1/confirmation/"))
+                .withHeader("Content-Type", equalTo("application/json"))
+                .withRequestBody(equalToJson(OtpConstants.EXPECTED_CONFIRMATION_REQUEST)));
+    }
+
+    @Test
+    public void confirmIvsWrongOtpShouldFail() {
+        ResponseInfo result = null;
+        //given
+        wireMockRule.givenThat(post(urlEqualTo(IVS_CONFIRM_RESOURCE))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.NOT_FOUND.value())));
+        //when
+        try {
+            this.classUnderTest.confirmOtp(this.ivsRequestConfirmOtpVO);
+        } catch (IvsConfirmOtpErrorException e) {
+            result = e.getOtpResponseInfo();
+        }
+        //then
+        Assert.assertEquals(OtpResponseInfo.OTP_SIGNUP_FAILED, result);
+    }
+
+    @Test
+    public void confirmIvsInternalServerErrorShouldFail() {
+        ResponseInfo result = null;
+        //given
+        wireMockRule.givenThat(post(urlEqualTo(IVS_CONFIRM_RESOURCE))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())));
+        //when
+        try {
+            this.classUnderTest.confirmOtp(this.ivsRequestConfirmOtpVO);
+        } catch (IvsConfirmOtpErrorException e) {
+            result = e.getOtpResponseInfo();
+        }
+        //then
+        Assert.assertEquals(OtpResponseInfo.OTP_VALIDATION_FAILED, result);
+
+    }
+
+    @Test
+    public void confirmIvsNotFoundErrorShouldFail() {
+        ResponseInfo result = null;
+        //given
+        wireMockRule.givenThat(post(urlEqualTo(IVS_CONFIRM_RESOURCE))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.NOT_FOUND.value())));
+        //when
+        try {
+            this.classUnderTest.confirmOtp(this.ivsRequestConfirmOtpVO);
+        } catch (IvsConfirmOtpErrorException e) {
+            result = e.getOtpResponseInfo();
+        }
+        //then
+        Assert.assertEquals(OtpResponseInfo.OTP_SIGNUP_FAILED, result);
+    }
 }
 
 

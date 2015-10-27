@@ -1,10 +1,12 @@
 package dk.unwire.ticketing.core.domain.otp.service;
 
 import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
-import dk.unwire.ticketing.core.domain.application.exception.ApplicationPropertyException;
-import dk.unwire.ticketing.core.domain.otp.exception.IvsErrorException;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtp;
-import dk.unwire.ticketing.core.domain.otp.service.model.IvsRequestOtpVO;
+import dk.unwire.ticketing.core.domain.otp.exception.IvsConfirmOtpErrorException;
+import dk.unwire.ticketing.core.domain.otp.exception.IvsRequestOtpErrorException;
+import dk.unwire.ticketing.core.domain.otp.service.model.confirm.IvsRequestConfirmOtp;
+import dk.unwire.ticketing.core.domain.otp.service.model.confirm.IvsRequestConfirmOtpVO;
+import dk.unwire.ticketing.core.domain.otp.service.model.register.IvsRequestOtp;
+import dk.unwire.ticketing.core.domain.otp.service.model.register.IvsRequestOtpVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -26,38 +28,45 @@ public class OtpService {
         String ivsSenderName = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
         String ivsMessageText = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey(), ivsDefaultMessageText);
 
-        validateProperties(ivsRequestOtpVO, ivsContextId, ivsSenderName);
+        ivsRequestOtpVO.validateProperties(ivsSenderName, ivsContextId);
 
-        String url = String.format("%s/context/%d/validation/identity/%d", ivsRequestOtpVO.getSystemProperty().getValue(), ivsContextId, ivsRequestOtpVO.getMsisdn());
-        IvsRequestOtp ivsRequestOTP = new IvsRequestOtp(ivsMessageText, ivsSenderName);
+        logger.debug("Received application properties for application with id [{}] ivs.context.id = [{}] ivs.sender.name = [{}]", applicationId, ivsContextId, ivsSenderName);
 
-        executeRequest(ivsRequestOTP, url);
+        String url = String.format("%s/context/%d/validation/identity/%s", ivsRequestOtpVO.getBaseUrl(), ivsContextId, ivsRequestOtpVO.getMsisdn());
+        IvsRequestOtp ivsRequestOTP = new IvsRequestOtp(ivsSenderName, ivsMessageText);
 
-    }
-
-    private void validateProperties(IvsRequestOtpVO ivsRequestOtpVO, Integer ivsContextId, String ivsSenderName) {
-        if (ivsSenderName == null) {
-            logger.error("Application with id {} is missing Application property {}", ivsRequestOtpVO.getApplication().getId(), ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
-            throw new ApplicationPropertyException("IVS Sender not defined in application properties");
-        } else if (ivsContextId == null) {
-            logger.error("Application with id {} is missing Application property {}", ivsRequestOtpVO.getApplication().getId(), ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
-            throw new ApplicationPropertyException("IVS contextId not defined in application properties");
+        try {
+            executeRequest(ivsRequestOTP, url);
+        } catch (HttpStatusCodeException e) {
+            logger.info("Error requesting OTP from IVS {}", e.getResponseBodyAsString());
+            throw new IvsRequestOtpErrorException(e);
         }
-        logger.debug("Received application properties for application with id [{}] ivs.context.id = [{}] ivs.sender.name = [{}]", ivsRequestOtpVO.getApplication().getId(), ivsContextId, ivsSenderName);
     }
 
-    private void executeRequest(IvsRequestOtp ivsRequestOTP, String url) {
+    public void confirmOtp(IvsRequestConfirmOtpVO ivsRequestConfirmOtpVO) {
+        Integer ivsContextId = ivsRequestConfirmOtpVO.getApplication().getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
+        ivsRequestConfirmOtpVO.validateProperties(ivsContextId);
+        String url = String.format("%s/context/%d/confirmation/", ivsRequestConfirmOtpVO.getBaseUrl(), ivsContextId);
+        IvsRequestConfirmOtp ivsRequestConfirmOtp = new IvsRequestConfirmOtp(ivsRequestConfirmOtpVO);
+        try {
+            executeRequest(ivsRequestConfirmOtp, url);
+        } catch (HttpStatusCodeException e) {
+            logger.info("Error confirming OTP from IVS {}", e.getResponseBodyAsString());
+
+            throw new IvsConfirmOtpErrorException(e);
+        }
+    }
+
+
+    private void executeRequest(Object object, String url) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity entity = new HttpEntity(ivsRequestOTP, headers);
+        HttpEntity entity = new HttpEntity(object, headers);
         ResponseEntity<String> responseEntity;
-        try {
-            responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
 
-        } catch (HttpStatusCodeException e) {
-            throw new IvsErrorException(e);
-        }
+        responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
         logger.info("received response from IVS [{}]", responseEntity);
     }
 }
