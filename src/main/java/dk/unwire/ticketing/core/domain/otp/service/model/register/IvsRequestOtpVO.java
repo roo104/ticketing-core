@@ -28,7 +28,7 @@ public final class IvsRequestOtpVO {
     private void validateIvsContextIdProperty(Integer ivsContextId) {
         if (ivsContextId == null) {
             logger.error("Application with id {} is missing Application property {}", this.application.getId(),
-                    ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
+                    ApplicationPropertyKey.IVS_CONTEXT_ID.getKey());
             throw new ApplicationPropertyException("IVS contextId not defined in application properties");
         }
     }
@@ -36,7 +36,7 @@ public final class IvsRequestOtpVO {
     private void validateIvsSenderProperty(String ivsSenderName) {
         if (ivsSenderName == null) {
             logger.error("Application with id {} is missing Application property {}", this.application.getId(),
-                    ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
+                    ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
             throw new ApplicationPropertyException("IVS Sender not defined in application properties");
         }
     }

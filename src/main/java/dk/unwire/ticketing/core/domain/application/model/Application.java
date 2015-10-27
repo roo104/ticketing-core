@@ -1,8 +1,8 @@
 package dk.unwire.ticketing.core.domain.application.model;
 
 import dk.unwire.ticketing.core.common.model.PropertyMap;
+import lombok.Getter;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,190 +10,81 @@ import javax.persistence.Id;
 @Entity
 public class Application extends PropertyMap<ApplicationProperty> {
 
+    @Getter
     @Id
     @Column(name = "id")
     private int id;
-    @Basic
+    @Getter
     @Column(name = "shortcode")
     private long shortcode;
-    @Basic
+    @Getter
     @Column(name = "test_pattern")
     private String testPattern;
-    @Basic
+    @Getter
     @Column(name = "control_pattern")
     private String controlPattern;
-    @Basic
+    @Getter
     @Column(name = "verification_pattern")
     private String verificationPattern;
-    @Basic
+    @Getter
     @Column(name = "country_id")
     private Integer countryId;
-    @Basic
+    @Getter
     @Column(name = "ttl_min_mo")
     private Integer ttlMinMo;
-    @Basic
+    @Getter
     @Column(name = "ttl_min_mt")
     private Integer ttlMinMt;
-    @Basic
+    @Getter
     @Column(name = "verification_timeout")
     private Integer verificationTimeout;
-    @Basic
+    @Getter
     @Column(name = "vat")
     private String vat;
-    @Basic
+    @Getter
     @Column(name = "description")
     private String description;
-    @Basic
+    @Getter
     @Column(name = "gw_username")
     private String gwUsername;
-    @Basic
+    @Getter
     @Column(name = "gw_password")
     private String gwPassword;
-    @Basic
+    @Getter
     @Column(name = "test_mediacode")
     private String testMediacode;
-    @Basic
+    @Getter
     @Column(name = "shortcode_prefix")
     private String shortcodePrefix;
-    @Basic
+    @Getter
     @Column(name = "gw_validity_min")
     private Integer gwValidityMin;
-    @Basic
+    @Getter
     @Column(name = "shortcode_id")
     private Integer shortcodeId;
-    @Basic
+    @Getter
     @Column(name = "action_pattern")
     private String actionPattern;
-    @Basic
+    @Getter
     @Column(name = "reminder_enabled")
     private Byte reminderEnabled;
-    @Basic
+    @Getter
     @Column(name = "buy_ticket_type")
     private Integer buyTicketType;
-    @Basic
+    @Getter
     @Column(name = "application_type")
     private Integer applicationType;
-    @Basic
+    @Getter
     @Column(name = "time_zone")
     private String timeZone;
-    @Basic
+    @Getter
     @Column(name = "deleted")
     private Byte deleted;
-    @Basic
+    @Getter
     @Column(name = "parent")
     private int parent;
-    @Basic
+    @Getter
     @Column(name = "serialcode_prefix")
     private String serialcodePrefix;
-    @Basic
-    @Column(name = "account_source")
-    private String accountSource;
-
-    public Application() {
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public long getShortcode() {
-        return this.shortcode;
-    }
-
-    public String getTestPattern() {
-        return this.testPattern;
-    }
-
-    public String getControlPattern() {
-        return this.controlPattern;
-    }
-
-    public String getVerificationPattern() {
-        return this.verificationPattern;
-    }
-
-    public Integer getCountryId() {
-        return this.countryId;
-    }
-
-    public Integer getTtlMinMo() {
-        return this.ttlMinMo;
-    }
-
-    public Integer getTtlMinMt() {
-        return this.ttlMinMt;
-    }
-
-    public Integer getVerificationTimeout() {
-        return this.verificationTimeout;
-    }
-
-    public String getVat() {
-        return this.vat;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public String getGwUsername() {
-        return this.gwUsername;
-    }
-
-    public String getGwPassword() {
-        return this.gwPassword;
-    }
-
-    public String getTestMediacode() {
-        return this.testMediacode;
-    }
-
-    public String getShortcodePrefix() {
-        return this.shortcodePrefix;
-    }
-
-    public Integer getGwValidityMin() {
-        return this.gwValidityMin;
-    }
-
-    public Integer getShortcodeId() {
-        return this.shortcodeId;
-    }
-
-    public String getActionPattern() {
-        return this.actionPattern;
-    }
-
-    public Byte getReminderEnabled() {
-        return this.reminderEnabled;
-    }
-
-    public Integer getBuyTicketType() {
-        return this.buyTicketType;
-    }
-
-    public Integer getApplicationType() {
-        return this.applicationType;
-    }
-
-    public String getTimeZone() {
-        return this.timeZone;
-    }
-
-    public Byte getDeleted() {
-        return this.deleted;
-    }
-
-    public int getParent() {
-        return this.parent;
-    }
-
-    public String getSerialcodePrefix() {
-        return this.serialcodePrefix;
-    }
-
-    public String getAccountSource() {
-        return this.accountSource;
-    }
 
 }

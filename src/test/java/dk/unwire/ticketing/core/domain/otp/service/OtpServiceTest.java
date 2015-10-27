@@ -50,9 +50,9 @@ public class OtpServiceTest {
         createTestData();
         setupRestMocks();
 
-        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey())).willReturn(IVS_MESSAGE_TEXT);
-        given(this.testApplication.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey())).willReturn(IVS_CONTEXT_ID);
-        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey())).willReturn(IVS_SENDER_NAME);
+        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey())).willReturn(IVS_MESSAGE_TEXT);
+        given(this.testApplication.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey())).willReturn(IVS_CONTEXT_ID);
+        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey())).willReturn(IVS_SENDER_NAME);
     }
 
     private void setupRestMocks() {
@@ -86,7 +86,7 @@ public class OtpServiceTest {
     @Test(expected = ApplicationPropertyException.class)
     public void missingApplicationPropertyIvsContextIdShouldFail() {
         //given
-        given(this.testApplication.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey())).willReturn(null);
+        given(this.testApplication.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey())).willReturn(null);
         //when
         this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
     }
@@ -94,7 +94,7 @@ public class OtpServiceTest {
     @Test(expected = ApplicationPropertyException.class)
     public void missingApplicationPropertyIvsSenderNameShouldFail() {
         //given
-        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey())).willReturn(null);
+        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey())).willReturn(null);
         //when
         this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
     }
@@ -102,7 +102,7 @@ public class OtpServiceTest {
     @Test
     public void missingIvsMessageTextShouldReturnOk() {
         //given
-        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey())).willReturn(null);
+        given(this.testApplication.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey())).willReturn(null);
         // when
         this.classUnderTest.requestOtp(this.testIvsRequestOtpVO);
         //then
@@ -122,7 +122,7 @@ public class OtpServiceTest {
     @Test(expected = ApplicationPropertyException.class)
     public void confirmMissingApplicationPropertyIvsContextIdShouldFail() {
         //given
-        given(this.testApplication.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey())).willReturn(null);
+        given(this.testApplication.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey())).willReturn(null);
         //when
         this.classUnderTest.confirmOtp(this.ivsRequestConfirmOtpVO);
     }

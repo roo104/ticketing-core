@@ -19,14 +19,14 @@ public class ApplicationTest {
     @Before
     public void setUp() {
         this.classUnderTest = new Application();
-        this.classUnderTest.addProperty(new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME));
-        this.classUnderTest.addProperty(new ApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), IVS_CONTEXT_ID));
+        this.classUnderTest.addProperty(new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey(), IVS_SENDER_NAME));
+        this.classUnderTest.addProperty(new ApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey(), IVS_CONTEXT_ID));
     }
 
     @Test
     public void getStringProperty() {
         //when
-        String result = this.classUnderTest.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
+        String result = this.classUnderTest.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
         //then
         assertEquals(IVS_SENDER_NAME, result);
     }
@@ -34,7 +34,7 @@ public class ApplicationTest {
     @Test
     public void getStringPropertyThatIsEmptyShouldReturnNull() {
         //when
-        String result = this.classUnderTest.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey());
+        String result = this.classUnderTest.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey());
         //then
         assertEquals(null, result);
     }
@@ -42,7 +42,7 @@ public class ApplicationTest {
     @Test
     public void getStringPropertyThatIsEmptyWithDefaultValue() {
         //when
-        String result = this.classUnderTest.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey(), DEFAULT_STRING_VALUE);
+        String result = this.classUnderTest.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey(), DEFAULT_STRING_VALUE);
         //then
         assertEquals(DEFAULT_STRING_VALUE, result);
     }
@@ -50,7 +50,7 @@ public class ApplicationTest {
     @Test
     public void getIntProperty() {
         //when
-        int result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey());
+        int result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey());
         //then
         assertEquals(IVS_CONTEXT_ID_AS_INTEGER, result);
     }
@@ -58,7 +58,7 @@ public class ApplicationTest {
     @Test
     public void getIntPropertyThatIsEmptyShouldReturnNull() {
         //when
-        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey());
+        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey());
         //then
         assertEquals(null, result);
     }
@@ -66,7 +66,7 @@ public class ApplicationTest {
     @Test
     public void getIntPropertyThatIsEmptyWithDefaultValue() {
         //when
-        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getPropertyKey(), DEFAULT_INT_VALUE);
+        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey(), DEFAULT_INT_VALUE);
         //then
         assertEquals(DEFAULT_INT_VALUE, result);
     }
@@ -74,7 +74,7 @@ public class ApplicationTest {
     @Test
     public void getIntPropertyNotAnInteger() {
         //when
-        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
+        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
         //then
         assertEquals(null, result);
     }
@@ -82,7 +82,7 @@ public class ApplicationTest {
     @Test
     public void getIntPropertyNotAnIntegerWithDefaultValue() {
         //when
-        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey());
+        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
         //then
         assertEquals(null, result);
     }
