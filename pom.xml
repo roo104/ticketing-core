@@ -104,6 +104,7 @@
             <artifactId>spring-rest</artifactId>
             <version>1.0.26-RELEASE</version>
         </dependency>
+
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock</artifactId>

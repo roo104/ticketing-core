@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
@@ -28,17 +28,20 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = TicketingCoreApplication.class)
-@TransactionConfiguration(defaultRollback = true)
+@Rollback
 @WebAppConfiguration
 @Transactional
 public class OtpControllerIT {
+
     @ClassRule
     public static WireMockClassRule wireMockRule = new WireMockClassRule(OtpConstants.WIREMOCK_PORT);
+
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;
     @Autowired
     private RequestIdFilter requestIdFilter;
+
     private HttpHeaders httpHeaders;
 
     @Before
@@ -59,7 +62,7 @@ public class OtpControllerIT {
     @Test
     public void requestOtpAllOk() throws Exception {
         this.mockMvc.perform(post("/v1/1/otp/")
-                .content("{\"msisdn\": 4520925064}")
+                .content("{\"msisdn\": 4551967719}")
                 .headers(this.httpHeaders))
                 .andExpect(status().isOk())
                 .andDo(print());

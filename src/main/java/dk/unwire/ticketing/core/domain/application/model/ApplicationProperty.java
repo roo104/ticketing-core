@@ -1,31 +1,18 @@
 package dk.unwire.ticketing.core.domain.application.model;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import dk.unwire.ticketing.core.common.model.Property;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "application_property")
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ApplicationProperty {
-    @Id
-    @Column(name = "id")
-    private int id;
-    @Column(name = "name")
-    @Getter
-    private String name;
-    @Column(name = "value")
-    @Getter
-    private String value;
+public class ApplicationProperty extends Property {
 
-    protected ApplicationProperty(String name, String value) {
-        this.name = name;
-        this.value = value;
+    protected ApplicationProperty() {
     }
 
+    public ApplicationProperty(String name, String value) {
+        super(name, value);
+    }
 }

@@ -24,6 +24,7 @@ public final class IvsRequestOtpErrorException extends RuntimeException {
                 break;
             default:
                 this.otpResponseInfo = OtpResponseInfo.OTP_REQUEST_DEFAULT_ERROR;
+                break;
         }
     }
 }

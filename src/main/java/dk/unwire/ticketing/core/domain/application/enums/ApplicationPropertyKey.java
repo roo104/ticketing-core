@@ -5,13 +5,13 @@ public enum ApplicationPropertyKey {
     IVS_MESSAGE_TEXT("ivs.message.text"),
     IVS_SENDER_NAME("ivs.sender.name");
 
-    private String propertyKey;
+    private String key;
 
-    ApplicationPropertyKey(String propertyKey) {
-        this.propertyKey = propertyKey;
+    ApplicationPropertyKey(String key) {
+        this.key = key;
     }
 
-    public String getPropertyKey() {
-        return this.propertyKey;
+    public String getKey() {
+        return this.key;
     }
 }

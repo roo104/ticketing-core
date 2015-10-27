@@ -21,7 +21,8 @@ public class AccountService {
         IdentifierType identifierType = findOrCreateAccountVO.getIdentifierType();
         int applicationId = findOrCreateAccountVO.getApplicationId();
 
-        AccountIdentifier accountIdentifier = this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(identifier, identifierType, applicationId);
+        AccountIdentifier accountIdentifier = this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(
+                identifier, identifierType, applicationId);
 
         if (accountIdentifier == null) {
             Account account = Account.findOrCreateAccount(findOrCreateAccountVO);

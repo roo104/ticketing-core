@@ -4,15 +4,12 @@ import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static junit.framework.Assert.assertEquals;
 
 public class ApplicationTest {
+
     private Application classUnderTest;
-    private Map<String, ApplicationProperty> applicationPropertyMap;
-    private ApplicationProperty testApplicationProperty;
+
     public static final String IVS_CONTEXT_ID = "1";
     public static final int IVS_CONTEXT_ID_AS_INTEGER = 1;
     public static final String IVS_SENDER_NAME = "Unwire";
@@ -22,108 +19,72 @@ public class ApplicationTest {
     @Before
     public void setUp() {
         this.classUnderTest = new Application();
-        this.applicationPropertyMap = new HashMap<>();
-        this.classUnderTest.setApplicationProperties(this.applicationPropertyMap);
+        this.classUnderTest.addProperty(new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey(), IVS_SENDER_NAME));
+        this.classUnderTest.addProperty(new ApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey(), IVS_CONTEXT_ID));
     }
 
     @Test
-    public void getStringApplicationProperty() {
-        //given
-        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME);
-        this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
+    public void getStringProperty() {
         //when
-        String result = this.classUnderTest.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
+        String result = this.classUnderTest.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
         //then
         assertEquals(IVS_SENDER_NAME, result);
     }
 
     @Test
-    public void getStringApplicationPropertyWithDefaultShouldNotReturnDefaultValue() {
-        //given
-        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME);
-        this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
+    public void getStringPropertyThatIsEmptyShouldReturnNull() {
         //when
-        String result = this.classUnderTest.getStringApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME,DEFAULT_STRING_VALUE);
-        //then
-        assertEquals(IVS_SENDER_NAME, result);
-    }
-
-    @Test
-    public void getStringApplicationPropertyThatIsEmptyShouldReturnNull() {
-        //when
-        String result = this.classUnderTest.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT);
+        String result = this.classUnderTest.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey());
         //then
         assertEquals(null, result);
     }
 
     @Test
-    public void getStringApplicationPropertyThatIsEmptyWithDefaultValue() {
+    public void getStringPropertyThatIsEmptyWithDefaultValue() {
         //when
-        String result = this.classUnderTest.getStringApplicationProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT, DEFAULT_STRING_VALUE);
+        String result = this.classUnderTest.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey(), DEFAULT_STRING_VALUE);
         //then
         assertEquals(DEFAULT_STRING_VALUE, result);
     }
 
     @Test
-    public void getIntApplicationProperty() {
-        //given
-        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), IVS_CONTEXT_ID);
-
-        this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), this.testApplicationProperty);
+    public void getIntProperty() {
         //when
-        int result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
+        int result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey());
         //then
         assertEquals(IVS_CONTEXT_ID_AS_INTEGER, result);
     }
 
     @Test
-    public void getIntApplicationPropertyWithDefaultShouldNotReturnDefault() {
-        //given
-        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), IVS_CONTEXT_ID);
-
-        this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_CONTEXT_ID.getPropertyKey(), this.testApplicationProperty);
+    public void getIntPropertyThatIsEmptyShouldReturnNull() {
         //when
-        int result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
-        //then
-        assertEquals(IVS_CONTEXT_ID_AS_INTEGER, result);
-    }
-
-    @Test
-    public void getIntApplicationPropertyThatIsEmptyShouldReturnNull() {
-        //when
-        Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID);
+        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey());
         //then
         assertEquals(null, result);
     }
 
     @Test
-    public void getIntApplicationPropertyThatIsEmptyWithDefaultValue() {
+    public void getIntPropertyThatIsEmptyWithDefaultValue() {
         //when
-        Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_CONTEXT_ID, DEFAULT_INT_VALUE);
+        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey(), DEFAULT_INT_VALUE);
         //then
         assertEquals(DEFAULT_INT_VALUE, result);
     }
 
     @Test
-    public void getIntApplicationPropertyNotAnInteger() {
-        //given
-        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME);
-        this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
+    public void getIntPropertyNotAnInteger() {
         //when
-        Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME);
+        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
         //then
         assertEquals(null, result);
     }
 
     @Test
-    public void getIntApplicationPropertyNotAnIntegerWithDefaultValue() {
-        //given
-        this.testApplicationProperty = new ApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), IVS_SENDER_NAME);
-        this.applicationPropertyMap.put(ApplicationPropertyKey.IVS_SENDER_NAME.getPropertyKey(), this.testApplicationProperty);
+    public void getIntPropertyNotAnIntegerWithDefaultValue() {
         //when
-        Integer result = this.classUnderTest.getIntApplicationProperty(ApplicationPropertyKey.IVS_SENDER_NAME, DEFAULT_INT_VALUE);
+        Integer result = this.classUnderTest.getIntProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
         //then
-        assertEquals(DEFAULT_INT_VALUE, result);
+        assertEquals(null, result);
     }
 
 }

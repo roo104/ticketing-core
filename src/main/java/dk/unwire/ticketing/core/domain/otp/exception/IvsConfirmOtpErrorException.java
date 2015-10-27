@@ -21,11 +21,13 @@ public class IvsConfirmOtpErrorException extends RuntimeException {
                 break;
             case BAD_REQUEST:
                 this.otpResponseInfo = OtpResponseInfo.OTP_SIGNUP_FAILED;
+                break;
             case NOT_FOUND:
                 this.otpResponseInfo = OtpResponseInfo.OTP_SIGNUP_FAILED;
                 break;
             default:
                 this.otpResponseInfo = OtpResponseInfo.OTP_VALIDATION_FAILED;
+                break;
         }
     }
 }
