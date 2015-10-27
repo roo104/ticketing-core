@@ -1,6 +1,7 @@
 package dk.unwire.ticketing.core.domain.otp.service;
 
 import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
+import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.otp.exception.IvsConfirmOtpErrorException;
 import dk.unwire.ticketing.core.domain.otp.exception.IvsRequestOtpErrorException;
 import dk.unwire.ticketing.core.domain.otp.service.model.confirm.IvsRequestConfirmOtp;
@@ -16,24 +17,23 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-
 @Service
 @Transactional(rollbackFor = RestClientException.class)
 public class OtpService {
+
     private static final Logger logger = LoggerFactory.getLogger(OtpService.class);
 
     public void requestOtp(IvsRequestOtpVO ivsRequestOtpVO) {
         String ivsDefaultMessageText = "";
-        int applicationId = ivsRequestOtpVO.getApplication().getId();
-        Integer ivsContextId = ivsRequestOtpVO.getApplication().getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey());
-        String ivsSenderName = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
-        String ivsMessageText = ivsRequestOtpVO.getApplication().getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey(),
-                ivsDefaultMessageText);
+        Application application = ivsRequestOtpVO.getApplication();
+        Integer ivsContextId = application.getIntProperty(ApplicationPropertyKey.IVS_CONTEXT_ID.getKey());
+        String ivsSenderName = application.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey());
+        String ivsMessageText = application.getStringProperty(ApplicationPropertyKey.IVS_MESSAGE_TEXT.getKey(), ivsDefaultMessageText);
 
         ivsRequestOtpVO.validateProperties(ivsSenderName, ivsContextId);
 
         logger.debug("Received application properties for application with id [{}] ivs.context.id = [{}] ivs.sender.name = [{}]",
-                applicationId, ivsContextId, ivsSenderName);
+                application.getId(), ivsContextId, ivsSenderName);
 
         String url = String.format("%s/context/%d/validation/identity/%s", ivsRequestOtpVO.getBaseUrl(), ivsContextId, ivsRequestOtpVO.getMsisdn());
         IvsRequestOtp ivsRequestOTP = new IvsRequestOtp(ivsSenderName, ivsMessageText);

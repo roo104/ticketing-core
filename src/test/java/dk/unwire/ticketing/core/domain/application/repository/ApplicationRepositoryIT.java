@@ -1,8 +1,8 @@
-package dk.unwire.ticketing.core.domain.product.repository;
+package dk.unwire.ticketing.core.domain.application.repository;
 
 import dk.unwire.ticketing.core.TicketingCoreApplication;
-import dk.unwire.ticketing.core.domain.product.model.Product;
-import dk.unwire.ticketing.core.domain.product.model.ProductProperty;
+import dk.unwire.ticketing.core.domain.application.enums.ApplicationPropertyKey;
+import dk.unwire.ticketing.core.domain.application.model.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +17,16 @@ import static org.junit.Assert.assertNotNull;
 @SpringApplicationConfiguration(classes = TicketingCoreApplication.class)
 @WebAppConfiguration
 @Transactional
-public class ProductRepositoryIT {
+public class ApplicationRepositoryIT {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ApplicationRepository applicationRepository;
 
     @Test
-    public void insertProduct() {
-        Product product = new Product();
-        product.addProperty(new ProductProperty("prop1", "val1"));
-
-        this.productRepository.save(product);
-
-        Product savedProduct = this.productRepository.findOne(product.getId());
-        assertNotNull(savedProduct);
-        assertNotNull(savedProduct.getStringProperty("prop1"));
+    public void getApplication() {
+        Application savedApplication = this.applicationRepository.findOne(1);
+        assertNotNull(savedApplication);
+        assertNotNull(savedApplication.getStringProperty(ApplicationPropertyKey.IVS_SENDER_NAME.getKey()));
     }
+
 }

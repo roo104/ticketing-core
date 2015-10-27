@@ -1,50 +1,52 @@
 package dk.unwire.ticketing.core.domain.product.model;
 
 import dk.unwire.ticketing.core.common.model.PropertyMap;
+import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
+@AssociationOverride(name = "properties", joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
 public class Product extends PropertyMap<ProductProperty> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Getter
     private long id;
-    @Basic
+    @Getter
     @Column(name = "name")
     private String name;
-    @Basic
+    @Getter
     @Column(name = "type")
     private String type;
-    @Basic
+    @Getter
     @Column(name = "price")
     private Integer price;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_validity_id")
     private ProductValidity productValidity;
-    @Basic
+    @Getter
     @Column(name = "application_id")
     private Integer applicationId;
-    @Basic
+    @Getter
     @Column(name = "deleted")
     private boolean deleted;
-    @Basic
+    @Getter
     @Column(name = "certificate_enabled")
     private boolean certificateEnabled;
-    @Basic
+    @Getter
     @Column(name = "activated")
     private boolean activated;
-    @Basic
+    @Getter
     @Column(name = "product_variant")
     private Integer productVariant;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "price_table_id")
     private PriceTable priceTable;
-    @Basic
+    @Getter
     @Column(name = "vat")
     private String vat;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -55,68 +57,5 @@ public class Product extends PropertyMap<ProductProperty> {
     public Product() {
         this.invalidBuyTimes = new HashSet<>();
     }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public Integer getPrice() {
-        return this.price;
-    }
-
-    public Integer getApplicationId() {
-        return this.applicationId;
-    }
-
-    public boolean getDeleted() {
-        return this.deleted;
-    }
-
-    public boolean getCertificateEnabled() {
-        return this.certificateEnabled;
-    }
-
-    public boolean getActivated() {
-        return this.activated;
-    }
-
-    public Integer getProductVariant() {
-        return this.productVariant;
-    }
-
-    public String getVat() {
-        return this.vat;
-    }
-
-    public boolean isAllowedToPurchase() {
-        return false;
-    }
-
-    public Collection<InvalidBuyTime> getInvalidBuyTimes() {
-        return this.invalidBuyTimes;
-    }
-
-//    public Map<String, ProductProperty> getProductProperties() {
-//        return this.productProperties;
-//    }
-//
-//    public void addProductProperty(String name, String value) {
-//        this.productProperties.put(name, new ProductProperty(name, value));
-//    }
-
-    public boolean canBeBought(ZonedDateTime buyTime) {
-        return true;
-    }
-
-    public boolean canBeActivated(ZonedDateTime buyTime) {
-        return true;
-    }
+    
 }

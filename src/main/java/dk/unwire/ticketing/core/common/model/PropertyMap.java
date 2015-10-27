@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Embeddable
+@MappedSuperclass
 public class PropertyMap<T extends Property> {
 
     private static final Logger logger = LoggerFactory.getLogger(PropertyMap.class);

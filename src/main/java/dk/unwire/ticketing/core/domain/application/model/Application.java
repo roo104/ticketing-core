@@ -3,11 +3,10 @@ package dk.unwire.ticketing.core.domain.application.model;
 import dk.unwire.ticketing.core.common.model.PropertyMap;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@AssociationOverride(name = "properties", joinColumns = @JoinColumn(name = "application_id", referencedColumnName = "id"))
 public class Application extends PropertyMap<ApplicationProperty> {
 
     @Getter

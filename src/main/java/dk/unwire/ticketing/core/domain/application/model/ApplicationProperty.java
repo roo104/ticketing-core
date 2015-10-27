@@ -7,9 +7,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "application_property")
-public final class ApplicationProperty extends Property {
+public class ApplicationProperty extends Property {
 
-    public ApplicationProperty() {
+    protected ApplicationProperty() {
     }
 
     public ApplicationProperty(String name, String value) {
