@@ -35,7 +35,9 @@ public class InvalidBuyTime {
     private boolean inversed;
     @Getter
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "time_period_id")
     private TimePeriod timePeriod;
+
+    public InvalidBuyTime() {}
 
 }

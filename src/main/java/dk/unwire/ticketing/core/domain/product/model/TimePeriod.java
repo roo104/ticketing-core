@@ -1,12 +1,9 @@
 package dk.unwire.ticketing.core.domain.product.model;
 
-import lombok.Builder;
-
 import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 
-@Builder
 @Entity
 @Table(name = "time_period")
 public class TimePeriod {
