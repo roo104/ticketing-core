@@ -33,4 +33,11 @@ public class ProductRepositoryIT {
         assertNotNull(savedProduct);
         assertNotNull(savedProduct.getStringProperty("prop1"));
     }
+
+    @Test
+    public void findActiveProductsByApplication() {
+        Product savedProduct = this.productRepository.findOne(1L);
+        assertNotNull(savedProduct);
+        assertNotNull(savedProduct.getStringProperty("prop1"));
+    }
 }

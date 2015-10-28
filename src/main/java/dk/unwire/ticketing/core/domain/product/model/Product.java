@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
+@Table(name = "product")
 @AssociationOverride(name = "properties", joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
 public class Product extends PropertyMap<ProductProperty> {
 
@@ -25,8 +26,9 @@ public class Product extends PropertyMap<ProductProperty> {
     @Getter
     @Column(name = "price")
     private Integer price;
+    @Getter
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_validity_id")
+    @JoinColumn(name = "product_validity_id", referencedColumnName = "id")
     private ProductValidity productValidity;
     @Getter
     @Column(name = "application_id")
@@ -43,12 +45,14 @@ public class Product extends PropertyMap<ProductProperty> {
     @Getter
     @Column(name = "product_variant")
     private Integer productVariant;
+    @Getter
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "price_table_id")
     private PriceTable priceTable;
     @Getter
     @Column(name = "vat")
     private String vat;
+    @Getter
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Collection<InvalidBuyTime> invalidBuyTimes;
