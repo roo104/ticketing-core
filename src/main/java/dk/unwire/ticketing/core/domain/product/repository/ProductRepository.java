@@ -11,9 +11,6 @@ import java.util.Collection;
 public interface ProductRepository extends CrudRepository<Product, Long>  {
 
     @Query("from Product p " +
-            "left join fetch p.productValidity " +
-            "left join fetch p.priceTable " +
-            "left join fetch p.invalidBuyTimes " +
             "where p.applicationId = ?1 " +
             "and p.activated = true " +
             "and p.deleted = false")

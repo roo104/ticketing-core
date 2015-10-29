@@ -45,13 +45,16 @@ public class ProductRepositoryIT {
 
         // then a collection of products should be returned with all attributes loaded
         assertNotNull(savedProducts);
-        Product savedProduct = savedProducts.stream().findFirst().get();
+        Product savedProduct = savedProducts.stream().skip(1).findFirst().get();
         validateProduct(savedProduct);
+        assertNotNull(savedProduct.getVoucherPrice());
+        assertNotNull(savedProduct.getStringProperty("name2"));
+
+
     }
 
     private void validateProduct(Product savedProduct) {
         assertNotNull(savedProduct);
-        assertNotNull(savedProduct.getStringProperty("name1"));
         assertNotNull(savedProduct.getProductValidity());
         Collection<InvalidBuyTime> invalidBuyTimes = savedProduct.getInvalidBuyTimes();
         assertNotNull(invalidBuyTimes);

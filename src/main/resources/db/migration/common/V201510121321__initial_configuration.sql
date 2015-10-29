@@ -87,3 +87,16 @@ CREATE TABLE `time_period` (
   `time_zone` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `price` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `price_type` int(11) DEFAULT '0',
+  `value` int(11) DEFAULT NULL,
+  `value_in_tokens` int(11) DEFAULT '0',
+  `extend_duration` tinyint(1) NOT NULL DEFAULT '0',
+  `pricable_id` bigint(20) DEFAULT NULL,
+  `pricable_type` int(11) DEFAULT NULL,
+  `token_pool_id` int(11) DEFAULT '0',
+  `price_category_type` int(5) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;

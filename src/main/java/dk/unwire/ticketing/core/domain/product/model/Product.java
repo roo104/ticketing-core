@@ -47,8 +47,8 @@ public class Product extends PropertyMap<ProductProperty> {
     private Integer productVariant;
     @Getter
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "price_table_id")
-    private PriceTable priceTable;
+    @JoinColumn(name = "id", referencedColumnName = "pricable_id")
+    private Price voucherPrice;
     @Getter
     @Column(name = "vat")
     private String vat;
