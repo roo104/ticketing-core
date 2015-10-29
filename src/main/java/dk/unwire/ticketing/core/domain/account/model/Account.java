@@ -39,12 +39,6 @@ public final class Account {
     private int successfulPurchases;
     @Column(name = "blacklist_expiredate")
     private ZonedDateTime blacklistExpiredate;
-    @Column(name = "billing_account_id")
-    private int billingAccountId;
-    @Column(name = "ars_account_id")
-    private long arsAccountId;
-    @Column(name = "ars_user_id")
-    private long arsUserId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
     private Collection<AccountIdentifier> accountIdentifiers;
 

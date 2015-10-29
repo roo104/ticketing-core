@@ -4,7 +4,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "invalid_buy_time")
@@ -17,10 +17,10 @@ public class InvalidBuyTime {
     private long id;
     @Getter
     @Column(name = "start_date")
-    private Timestamp startDate;
+    private ZonedDateTime startDate;
     @Getter
     @Column(name = "end_date")
-    private Timestamp endDate;
+    private ZonedDateTime endDate;
     @Getter
     @Column(name = "week_day")
     private Short weekDay;

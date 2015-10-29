@@ -2,7 +2,7 @@ package dk.unwire.ticketing.core.domain.product.model;
 
 import javax.persistence.*;
 import java.sql.Time;
-import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "time_period")
@@ -14,10 +14,10 @@ public class TimePeriod {
     private long id;
     @Basic
     @Column(name = "start_date")
-    private Timestamp startDate;
+    private ZonedDateTime startDate;
     @Basic
     @Column(name = "end_date")
-    private Timestamp endDate;
+    private ZonedDateTime endDate;
     @Basic
     @Column(name = "week_day")
     private Short weekDay;
@@ -38,11 +38,11 @@ public class TimePeriod {
         return this.id;
     }
 
-    public Timestamp getStartDate() {
+    public ZonedDateTime getStartDate() {
         return this.startDate;
     }
 
-    public Timestamp getEndDate() {
+    public ZonedDateTime getEndDate() {
         return this.endDate;
     }
 
