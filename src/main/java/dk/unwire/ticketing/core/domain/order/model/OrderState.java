@@ -1,5 +1,7 @@
 package dk.unwire.ticketing.core.domain.order.model;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,4 +12,7 @@ public class OrderState {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
+    @Getter
+    @Column(name = "state")
+    private int state;
 }

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "order")
+@Table(name = "\"order\"")
 @AssociationOverride(name = "properties", joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"))
 public class Order extends PropertyMap<OrderProperty> {
 
@@ -17,13 +17,19 @@ public class Order extends PropertyMap<OrderProperty> {
     @Column(name = "id")
     @Getter
     private long id;
+    @Getter
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Collection<Item> items;
+    @Getter
     @Embedded
     private Payment payment;
+    @Getter
     @Column(name = "note")
     private String note;
+    @Getter
     @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Collection<OrderState> orderStates;
 
 }

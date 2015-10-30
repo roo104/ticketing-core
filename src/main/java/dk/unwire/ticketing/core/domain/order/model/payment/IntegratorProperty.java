@@ -1,5 +1,7 @@
 package dk.unwire.ticketing.core.domain.order.model.payment;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,10 +12,13 @@ public class IntegratorProperty {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
+    @Getter
     @Column(name = "integrator_id")
     private int integratorId;
+    @Getter
     @Column(name = "scheme_id")
     private int schemeId;
+    @Getter
     @Column(name = "store_card")
     private boolean storeCard;
 }

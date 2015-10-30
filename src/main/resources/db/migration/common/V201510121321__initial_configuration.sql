@@ -274,8 +274,6 @@ CREATE TABLE `order_card_property` (
 CREATE TABLE `order_voucher_property` (
   `id`                         BIGINT(20)   NOT NULL AUTO_INCREMENT,
   `integrator_id`              INT(11)      NOT NULL,
-  `voucher_unit`               VARCHAR(255) NOT NULL,
-  `voucher_value`              INT(11)      NOT NULL,
   `encrypted_payment_password` VARCHAR(255) NOT NULL,
   `order_id`                   BIGINT(20)   NOT NULL,
   PRIMARY KEY (`id`),
@@ -309,6 +307,17 @@ CREATE TABLE `order_state` (
   `state`    INT(4)     NOT NULL,
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`)
+)
+  ENGINE = INNODB
+  CHARSET = utf8;
+
+CREATE TABLE `order_item` (
+  `id`            BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `product_id`    INT(11)    NOT NULL,
+  `product_count` INT(11)    NOT NULL,
+  `order_id`      BIGINT(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `order_id` (`order_id`)
 )
   ENGINE = INNODB
   CHARSET = utf8;

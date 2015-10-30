@@ -13,8 +13,10 @@ public class Item {
     @Column(name = "id")
     @Getter
     private long id;
+    @Getter
     @Column(name = "product_id")
     private int productId;
+    @Getter
     @Column(name = "product_count")
     private int productCount;
 }
