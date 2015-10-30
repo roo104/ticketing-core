@@ -9,10 +9,4 @@ import javax.persistence.Table;
 @Table(name = "product_property")
 public class ProductProperty extends Property {
 
-    protected ProductProperty() {
-    }
-
-    public ProductProperty(String name, String value) {
-        super(name, value);
-    }
 }

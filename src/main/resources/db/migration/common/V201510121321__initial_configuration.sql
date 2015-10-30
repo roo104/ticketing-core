@@ -248,4 +248,67 @@ CREATE TABLE system_property (
   ENGINE = INNODB
   DEFAULT CHARSET = UTF8;
 
+CREATE TABLE `order_integrator_property` (
+  `id`            BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `integrator_id` INT(11)    NOT NULL,
+  `scheme_id`     INT(11)    NOT NULL,
+  `store_card`    TINYINT(1) NOT NULL DEFAULT '0',
+  `order_id`      BIGINT(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
+CREATE TABLE `order_card_property` (
+  `id`                         BIGINT(20)   NOT NULL AUTO_INCREMENT,
+  `card_id`                    BIGINT(20)   NOT NULL,
+  `encrypted_payment_password` VARCHAR(255) NOT NULL,
+  `order_id`                   BIGINT(20)   NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE `order_voucher_property` (
+  `id`                         BIGINT(20)   NOT NULL AUTO_INCREMENT,
+  `integrator_id`              INT(11)      NOT NULL,
+  `voucher_unit`               VARCHAR(255) NOT NULL,
+  `voucher_value`              INT(11)      NOT NULL,
+  `encrypted_payment_password` VARCHAR(255) NOT NULL,
+  `order_id`                   BIGINT(20)   NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE `order_property` (
+  `id`       BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `name`     VARCHAR(100)        DEFAULT NULL,
+  `value`    TEXT,
+  `order_id` BIGINT(20)          DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
+)
+  ENGINE = INNODB
+  DEFAULT CHARSET = UTF8;
+
+CREATE TABLE `order` (
+  `id`   BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `note` TEXT,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = INNODB
+  CHARSET = utf8;
+
+CREATE TABLE `order_state` (
+  `id`       BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `order_id` BIGINT(20) NOT NULL,
+  `state`    INT(4)     NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
+)
+  ENGINE = INNODB
+  CHARSET = utf8;
