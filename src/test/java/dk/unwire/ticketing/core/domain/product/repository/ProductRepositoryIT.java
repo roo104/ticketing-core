@@ -33,7 +33,6 @@ public class ProductRepositoryIT {
 
         // then all attributes should be loaded
         validateProduct(savedProduct);
-
     }
 
     @Test
@@ -49,8 +48,6 @@ public class ProductRepositoryIT {
         validateProduct(savedProduct);
         assertNotNull(savedProduct.getVoucherPrice());
         assertNotNull(savedProduct.getStringProperty("name2"));
-
-
     }
 
     private void validateProduct(Product savedProduct) {
