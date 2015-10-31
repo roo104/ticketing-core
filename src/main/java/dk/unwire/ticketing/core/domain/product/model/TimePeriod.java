@@ -28,7 +28,7 @@ public class TimePeriod {
     private ZonedDateTime endDate;
     @Getter
     @Column(name = "week_day")
-    private int weekDay; // TODO: make as enum
+    private TimeDefinition weekDay;
     @Getter
     @Column(name = "start_time")
     private LocalTime startTime;
@@ -86,23 +86,22 @@ public class TimePeriod {
     private boolean isWithinWeekdayRange(ZonedDateTime dateTime) {
         boolean isWithinTimeRange = false;
 
-        TimeDefinition timeDefinition = TimeDefinition.fromDefinition(this.weekDay);
         TimeDefinition providedTimeDefinition = TimeDefinition.fromDataTime(dateTime);
 
-        if (TimeDefinition.ALL_DAY == timeDefinition) { // if weekDay is ALL_DAY we don't need to check anything else
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is ALL_DAY, return true", dateTime, timeDefinition, providedTimeDefinition);
+        if (TimeDefinition.ALL_DAY == this.weekDay) { // if weekDay is ALL_DAY we don't need to check anything else
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is ALL_DAY, return true", dateTime, this.weekDay, providedTimeDefinition);
             isWithinTimeRange = true;
-        } else if (TimeDefinition.WEEKDAY == timeDefinition && providedTimeDefinition.isWeekday()) { // if weekDay is WEEKDAY and our dateTime is also WEEKDAY
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is WEEKDAY, return true", dateTime, timeDefinition, providedTimeDefinition);
+        } else if (TimeDefinition.WEEKDAY == this.weekDay && providedTimeDefinition.isWeekday()) { // if weekDay is WEEKDAY and our dateTime is also WEEKDAY
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is WEEKDAY, return true", dateTime, this.weekDay, providedTimeDefinition);
             isWithinTimeRange = true;
-        } else if (TimeDefinition.WEEKEND == timeDefinition && providedTimeDefinition.isWeekend()) { // if weekDay is WEEKEND and our dateTime is also WEEKEND
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is WEEKEND, return true", dateTime, timeDefinition, providedTimeDefinition);
+        } else if (TimeDefinition.WEEKEND == this.weekDay && providedTimeDefinition.isWeekend()) { // if weekDay is WEEKEND and our dateTime is also WEEKEND
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is WEEKEND, return true", dateTime, this.weekDay, providedTimeDefinition);
             isWithinTimeRange = true;
-        } else if (timeDefinition == providedTimeDefinition) { // if weekDay is a special day and dateTime is also a special day
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is equals, return true", dateTime, timeDefinition, providedTimeDefinition);
+        } else if (this.weekDay == providedTimeDefinition) { // if weekDay is a special day and dateTime is also a special day
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is equals, return true", dateTime, this.weekDay, providedTimeDefinition);
             isWithinTimeRange = true;
         } else {
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is not within time range, return false", dateTime, timeDefinition, providedTimeDefinition);
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is not within time range, return false", dateTime, this.weekDay, providedTimeDefinition);
 
         }
         return isWithinTimeRange;
@@ -147,26 +146,25 @@ public class TimePeriod {
     private static final class Builder implements FirstStep, SecondStep, LastStep {
         private ZonedDateTime startDate;
         private ZonedDateTime endDate;
-        private int weekDay;
+        private TimeDefinition weekDay;
         private LocalTime startTime;
         private LocalTime endTime;
         private String timeZone;
 
         private Builder() {
-            this.weekDay = TimeDefinition.ALL_DAY.getDefinition();
+            this.weekDay = TimeDefinition.ALL_DAY;
         }
 
         @Override
         public FirstStep withDates(ZonedDateTime startDate, ZonedDateTime endDate) {
             this.startDate = startDate;
             this.endDate = endDate;
-
             return this;
         }
 
         @Override
         public SecondStep withWeekDay(TimeDefinition weekDay) {
-            this.weekDay = weekDay.getDefinition();
+            this.weekDay = weekDay;
             return this;
         }
 
