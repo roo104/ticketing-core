@@ -5,6 +5,7 @@ import lombok.Getter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "price")
 public class Price {
 
     @Id
@@ -18,9 +19,6 @@ public class Price {
     @Getter
     @Column(name = "value_in_tokens")
     private Integer valueInTokens;
-    @Getter
-    @Column(name = "pricable_id")
-    private Long pricableId;
     @Getter
     @Column(name = "pricable_type")
     private Integer pricableType;

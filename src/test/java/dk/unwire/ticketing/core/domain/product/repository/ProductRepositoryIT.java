@@ -1,8 +1,8 @@
 package dk.unwire.ticketing.core.domain.product.repository;
 
 import dk.unwire.ticketing.core.TicketingCoreApplication;
-import dk.unwire.ticketing.core.domain.product.model.InvalidBuyTime;
 import dk.unwire.ticketing.core.domain.product.model.Product;
+import dk.unwire.ticketing.core.domain.product.model.TimePeriod;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +56,9 @@ public class ProductRepositoryIT {
     private void validateProduct(Product savedProduct) {
         assertNotNull(savedProduct);
         assertNotNull(savedProduct.getProductValidity());
-        Collection<InvalidBuyTime> invalidBuyTimes = savedProduct.getInvalidBuyTimes();
-        assertNotNull(invalidBuyTimes);
-        InvalidBuyTime invalidBuyTime = invalidBuyTimes.stream().findFirst().get();
-        assertNotNull(invalidBuyTime);
+        Collection<TimePeriod> buyTimes = savedProduct.getBuyTimes();
+        assertNotNull(buyTimes);
+        TimePeriod buyTime = buyTimes.stream().findFirst().get();
+        assertNotNull(buyTime);
     }
 }

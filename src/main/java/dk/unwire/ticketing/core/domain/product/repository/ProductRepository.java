@@ -11,7 +11,7 @@ import java.util.Collection;
 public interface ProductRepository extends CrudRepository<Product, Long>  {
 
     @Query("from Product p " +
-            "where p.applicationId = ?1 " +
+            "where p.application.id = ?1 " +
             "and p.activated = true " +
             "and p.deleted = false")
     Collection<Product> findActiveProductsByApplication(int applicationId);
