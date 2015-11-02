@@ -92,9 +92,9 @@ public class Product extends PropertyMap<ProductProperty> {
     }
 
     /**
-     *
-     * @param dateTime
-     * @return
+     * Check against InvalidBuyTime and TimePeriod tables of a product is violating any of the time rules.
+     * @param dateTime DateTime to be checked against.
+     * @return True it allowed, else false.
      */
     public boolean isAllowedToBuy(ZonedDateTime dateTime) {
         boolean allowedToBuy = true;

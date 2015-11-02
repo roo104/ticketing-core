@@ -89,19 +89,24 @@ public class TimePeriod {
         TimeDefinition providedTimeDefinition = TimeDefinition.fromDataTime(dateTime);
 
         if (TimeDefinition.ALL_DAY == this.weekDay) { // if weekDay is ALL_DAY we don't need to check anything else
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is ALL_DAY, return true", dateTime, this.weekDay, providedTimeDefinition);
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is ALL_DAY, return true",
+                    dateTime, this.weekDay, providedTimeDefinition);
             isWithinTimeRange = true;
         } else if (TimeDefinition.WEEKDAY == this.weekDay && providedTimeDefinition.isWeekday()) { // if weekDay is WEEKDAY and our dateTime is also WEEKDAY
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is WEEKDAY, return true", dateTime, this.weekDay, providedTimeDefinition);
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is WEEKDAY, return true",
+                    dateTime, this.weekDay, providedTimeDefinition);
             isWithinTimeRange = true;
         } else if (TimeDefinition.WEEKEND == this.weekDay && providedTimeDefinition.isWeekend()) { // if weekDay is WEEKEND and our dateTime is also WEEKEND
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is WEEKEND, return true", dateTime, this.weekDay, providedTimeDefinition);
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is WEEKEND, return true",
+                    dateTime, this.weekDay, providedTimeDefinition);
             isWithinTimeRange = true;
         } else if (this.weekDay == providedTimeDefinition) { // if weekDay is a special day and dateTime is also a special day
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is equals, return true", dateTime, this.weekDay, providedTimeDefinition);
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is equals, return true",
+                    dateTime, this.weekDay, providedTimeDefinition);
             isWithinTimeRange = true;
         } else {
-            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is not within time range, return false", dateTime, this.weekDay, providedTimeDefinition);
+            logger.debug("dateTime[{}], timeDefinition[{}], providedTimeDefinition[{}] is not within time range, return false",
+                    dateTime, this.weekDay, providedTimeDefinition);
 
         }
         return isWithinTimeRange;

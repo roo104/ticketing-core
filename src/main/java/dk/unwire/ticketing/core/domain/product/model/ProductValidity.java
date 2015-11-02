@@ -25,7 +25,7 @@ public class ProductValidity {
     private int startDelayMinutes;
     @Getter
     @Column(name = "end_delay_minutes")
-    private Integer endDelayMinutes;
+    private int endDelayMinutes;
     @Getter
     @Column(name = "start_pattern")
     private String startPattern;
