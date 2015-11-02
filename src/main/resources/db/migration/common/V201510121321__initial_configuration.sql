@@ -301,10 +301,11 @@ CREATE TABLE `order` (
   ENGINE = INNODB
   CHARSET = utf8;
 
-CREATE TABLE `order_state` (
-  `id`       BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `order_id` BIGINT(20) NOT NULL,
-  `state`    INT(4)     NOT NULL,
+CREATE TABLE `order_log` (
+  `id`        BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `state`     INT(4)     NOT NULL,
+  `timestamp` TIMESTAMP  NOT NULL,
+  `order_id`  BIGINT(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`)
 )

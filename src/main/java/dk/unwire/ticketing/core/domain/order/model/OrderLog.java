@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "order_state")
+@Table(name = "order_log")
 public class OrderLog {
 
     @Id
