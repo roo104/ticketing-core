@@ -12,6 +12,8 @@ import java.time.ZonedDateTime;
 public class Ticket {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     @Column(name = "id")
     private long id;
     @Getter
