@@ -28,7 +28,7 @@ public class OrderRepositoryIT {
         assertNotNull(order);
         assertNotNull(order.getNote());
         assertEquals(1, order.getItems().size());
-        assertEquals(1, order.getOrderStates().size());
+        assertEquals(1, order.getOrderLogs().size());
         assertNotNull(order.getPayment());
     }
 }

@@ -30,6 +30,6 @@ public class Order extends PropertyMap<OrderProperty> {
     @Getter
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Collection<OrderState> orderStates;
+    private Collection<OrderLog> orderLogs;
 
 }
