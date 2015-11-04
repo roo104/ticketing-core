@@ -17,6 +17,6 @@ public class VoucherProperty {
     @Column(name = "integrator_id")
     private int integratorId;
     @Getter
-    @Column(name = "entrypted_payment_password")
+    @Column(name = "encrypted_payment_password")
     private String encryptedPaymentPassword;
 }

@@ -5,6 +5,10 @@ import javax.persistence.Converter;
 import java.sql.Time;
 import java.time.LocalTime;
 
+/**
+ * Converting between java.time.LocalTime and java.sql.Time.
+ * We use LocalTime when specifying when a product can be bought. This is always in local time.
+ */
 @Converter(autoApply = true)
 public class LocalTimeConverter implements AttributeConverter<LocalTime, Time> {
 
