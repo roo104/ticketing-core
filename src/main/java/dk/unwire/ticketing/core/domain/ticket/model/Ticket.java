@@ -1,5 +1,6 @@
 package dk.unwire.ticketing.core.domain.ticket.model;
 
+import dk.unwire.ticketing.core.common.model.PropertyMap;
 import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.product.model.Product;
@@ -10,7 +11,8 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 
 @Entity
-public class Ticket {
+@AssociationOverride(name = "properties", joinColumns = @JoinColumn(name = "ticket_id", referencedColumnName = "id"))
+public class Ticket extends PropertyMap<TicketProperty> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,5 +80,9 @@ public class Ticket {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ticket_id", referencedColumnName = "id")
     private Collection<LogEntry> logEntries;
+    @Getter
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ticket_id", referencedColumnName = "id")
+    private Collection<TicketState> ticketStates;
 
 }

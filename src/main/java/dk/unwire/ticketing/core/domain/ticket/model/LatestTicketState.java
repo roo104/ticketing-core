@@ -2,15 +2,15 @@ package dk.unwire.ticketing.core.domain.ticket.model;
 
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
 @Embeddable
 public class LatestTicketState {
 
     @Getter
-    @Column(name = "latest_ticket_state_id")
-    private Long latestTicketStateId;
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "latest_ticket_state_id", referencedColumnName = "id")
+    private TicketState latestTicketState;
     @Getter
     @Column(name = "ticket_state")
     private Integer ticketState;
