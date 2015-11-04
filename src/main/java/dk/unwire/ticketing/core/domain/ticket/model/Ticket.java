@@ -45,9 +45,6 @@ public class Ticket extends PropertyMap<TicketProperty> {
     @Embedded
     private TicketPrice ticketPrice;
     @Getter
-    @Column(name = "last_status_time")
-    private ZonedDateTime lastStatusTime;
-    @Getter
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
@@ -85,4 +82,19 @@ public class Ticket extends PropertyMap<TicketProperty> {
     @JoinColumn(name = "ticket_id", referencedColumnName = "id")
     private Collection<TicketState> ticketStates;
 
+    private Ticket() {
+
+    }
+
+    public Ticket(Account account, Product product) {
+        this.account = account;
+        this.product = product;
+        this.buyTime = ZonedDateTime.now();
+        this.type = product.getType();
+    }
+
+
+    public void initState() {
+
+    }
 }
