@@ -10,16 +10,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/v1/{applicationId}/product")
 public class ProductController {
 
-    @RequestMapping(path = "/v1/{applicationId}/product/{productId}", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ProductListResponse> getProducts(@PathVariable int applicationId) {
         GenericResponseInfo responseInfo = GenericResponseInfo.OK;
 
         return new ResponseEntity<>(new ProductListResponse(responseInfo), responseInfo.getHttpStatus());
     }
 
-    @RequestMapping(path = "/v1/{applicationId}/product", method = RequestMethod.GET)
+    @RequestMapping(path = "/{productId}", method = RequestMethod.GET)
     public ResponseEntity<ProductResponse> getProduct(@PathVariable int applicationId, @PathVariable long productId) {
         GenericResponseInfo responseInfo = GenericResponseInfo.OK;
 
