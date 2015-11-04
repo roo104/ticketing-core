@@ -22,17 +22,8 @@ spring:
 
 ---
 spring:
-  profiles: server
+  profiles: server-local, server-test, server-staging, server-production
 
   datasource:
     jndi-name: java:jboss/ticketing_core
-
----
-spring:
-  profiles: server-migrate
-
-  datasource:
-    jndi-name: java:jboss/ticketing_core
-
-
 

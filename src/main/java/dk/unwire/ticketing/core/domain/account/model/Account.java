@@ -16,7 +16,7 @@ import java.util.Iterator;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Account {
-    public static final int ZERO_PURCHASES = 0;
+
     @Getter
     @Id
     @Column(name = "id")
@@ -24,34 +24,18 @@ public final class Account {
     private int id;
     @Column(name = "application_id")
     private int applicationId;
-    @Getter
-    @Column(name = "msisdn")
-    private Long msisdn;
     @Column(name = "created")
     private ZonedDateTime created;
     @Column(name = "blacklisted")
     private boolean blacklisted;
-    @Column(name = "amount_used")
-    private int amountUsed;
-    @Column(name = "buy_attempts")
-    private int buyAttempts;
-    @Column(name = "successful_purchases")
-    private int successfulPurchases;
     @Column(name = "blacklist_expiredate")
     private ZonedDateTime blacklistExpiredate;
-    @Column(name = "billing_account_id")
-    private int billingAccountId;
-    @Column(name = "ars_account_id")
-    private long arsAccountId;
-    @Column(name = "ars_user_id")
-    private long arsUserId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
     private Collection<AccountIdentifier> accountIdentifiers;
 
     private Account(FindOrCreateAccountVO findOrCreateAccountVO) {
         this.accountIdentifiers = new ArrayList<>();
         this.applicationId = findOrCreateAccountVO.getApplicationId();
-        this.successfulPurchases = ZERO_PURCHASES;
         this.created = ZonedDateTime.now(ZoneOffset.UTC);
 
         AccountIdentifier accountIdentifier = AccountIdentifier.builder()

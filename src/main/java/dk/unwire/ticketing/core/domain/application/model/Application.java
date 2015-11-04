@@ -4,6 +4,7 @@ import dk.unwire.ticketing.core.common.model.PropertyMap;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @AssociationOverride(name = "properties", joinColumns = @JoinColumn(name = "application_id", referencedColumnName = "id"))
@@ -26,8 +27,9 @@ public class Application extends PropertyMap<ApplicationProperty> {
     @Column(name = "verification_pattern")
     private String verificationPattern;
     @Getter
-    @Column(name = "country_id")
-    private Integer countryId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id", referencedColumnName = "id")
+    private Country country;
     @Getter
     @Column(name = "ttl_min_mo")
     private Integer ttlMinMo;
@@ -66,7 +68,7 @@ public class Application extends PropertyMap<ApplicationProperty> {
     private String actionPattern;
     @Getter
     @Column(name = "reminder_enabled")
-    private Byte reminderEnabled;
+    private boolean reminderEnabled;
     @Getter
     @Column(name = "buy_ticket_type")
     private Integer buyTicketType;
@@ -78,12 +80,17 @@ public class Application extends PropertyMap<ApplicationProperty> {
     private String timeZone;
     @Getter
     @Column(name = "deleted")
-    private Byte deleted;
+    private boolean deleted;
     @Getter
     @Column(name = "parent")
-    private int parent;
+    private boolean parent;
     @Getter
     @Column(name = "serialcode_prefix")
     private String serialcodePrefix;
+
+    @Getter
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "application_hierarchy", joinColumns = { @JoinColumn(name = "child_id", referencedColumnName = "id")})
+    private Collection<Application> childApplications;
 
 }
