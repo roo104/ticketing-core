@@ -18,7 +18,7 @@ public class Order extends PropertyMap<OrderProperty> {
     @Getter
     private long id;
     @Getter
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Collection<Item> items;
     @Getter
@@ -28,7 +28,7 @@ public class Order extends PropertyMap<OrderProperty> {
     @Column(name = "note")
     private String note;
     @Getter
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Collection<OrderLog> orderLogs;
 

@@ -34,7 +34,7 @@ public class Product extends PropertyMap<ProductProperty> {
     @Column(name = "vat")
     private String vat;
     @Getter
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "product_validity_id", referencedColumnName = "id")
     private ProductValidity productValidity;
     @Getter
@@ -58,7 +58,7 @@ public class Product extends PropertyMap<ProductProperty> {
     @JoinColumn(name = "id", referencedColumnName = "pricable_id")
     private Price voucherPrice;
     @Getter
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "invalid_buy_time", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "time_period_id"))
     private Collection<TimePeriod> buyTimes;
 
