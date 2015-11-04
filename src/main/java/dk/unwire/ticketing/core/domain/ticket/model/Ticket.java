@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.Collection;
 
 @Entity
 public class Ticket {
@@ -52,15 +53,12 @@ public class Ticket {
     @Column(name = "test")
     private boolean test;
     @Getter
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tariff", referencedColumnName = "id")
     private Product product;
     @Getter
     @Column(name = "type")
     private String type;
-    @Getter
-    @Column(name = "ts")
-    private ZonedDateTime timestamp;
     @Getter
     @Embedded
     private LatestTicketState latestTicketState;
@@ -76,5 +74,9 @@ public class Ticket {
     @Getter
     @Column(name = "ticket_variant")
     private Integer ticketVariant;
+    @Getter
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "ticket_id", referencedColumnName = "id")
+    private Collection<LogEntry> logEntries;
 
 }

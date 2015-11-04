@@ -127,7 +127,7 @@
         <dependency>
             <groupId>dk.unwire.ticketing</groupId>
             <artifactId>spring-rest</artifactId>
-            <version>1.0.26-RELEASE</version>
+            <version>develop-SNAPSHOT</version>
         </dependency>
 
         <dependency>

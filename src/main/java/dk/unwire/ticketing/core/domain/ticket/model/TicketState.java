@@ -3,7 +3,6 @@ package dk.unwire.ticketing.core.domain.ticket.model;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "ticket_state")
@@ -26,8 +25,5 @@ public class TicketState {
     @Getter
     @Column(name = "error_code")
     private int errorCode;
-    @Getter
-    @Column(name = "timestamp")
-    private ZonedDateTime timestamp;
 
 }

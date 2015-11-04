@@ -18,13 +18,13 @@ public class Price {
     private Integer value;
     @Getter
     @Column(name = "value_in_tokens")
-    private Integer valueInTokens;
+    private Integer voucherUnits;
     @Getter
     @Column(name = "pricable_type")
     private Integer pricableType;
     @Getter
     @Column(name = "token_pool_id")
-    private Integer tokenPoolId;
+    private Integer voucherUnitId;
     @Getter
     @Column(name = "price_category_type")
     private Integer priceCategoryType;
