@@ -1,7 +1,8 @@
-package dk.unwire.ticketing.core.domain.ticket.model;
+package dk.unwire.ticketing.core.domain.ticket.model.factory;
 
 import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.product.model.Product;
+import dk.unwire.ticketing.core.domain.ticket.model.Ticket;
 import org.springframework.stereotype.Component;
 
 @Component

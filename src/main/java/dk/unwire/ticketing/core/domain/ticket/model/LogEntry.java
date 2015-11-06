@@ -8,6 +8,8 @@ import javax.persistence.*;
 @Table(name = "log_entry")
 public class LogEntry {
 
+    public static final int LOG_TYPE_PLATFORM_OPERATION = 101;
+
     @Id
     @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +32,19 @@ public class LogEntry {
     @Column(name = "user_dn")
     private String userDn;
     @Getter
-    @Column(name = "ticket_checker_id")
-    private Integer ticketCheckerId;
-    @Getter
     @Column(name = "error_code")
     private int errorCode;
     @Getter
     @Column(name = "nano_time")
     private long nanoTime;
+
+    private LogEntry() {
+    }
+
+    protected LogEntry(TicketState ticketState) {
+        this.ticketState = ticketState;
+        this.type = LOG_TYPE_PLATFORM_OPERATION;
+        this.nanoTime = System.nanoTime();
+    }
 
 }

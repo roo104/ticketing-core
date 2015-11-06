@@ -30,9 +30,9 @@ public class TicketRepositoryIT {
         assertNotNull(ticket.getProduct());
         assertNotNull(ticket.getAccount());
         assertNotNull(ticket.getApplication());
-        assertNotNull(ticket.getLatestTicketState().getLatestTicketState());
+        assertNotNull(ticket.getTicketStateInfo().getLatestTicketState());
         assertNotNull(ticket.getStringProperty("name1"));
-        assertEquals(1, ticket.getLogEntries().size());
-        assertEquals(1, ticket.getTicketStates().size());
+        assertEquals(1, ticket.getTicketStateInfo().getLogEntries().size());
+        assertEquals(1, ticket.getTicketStateInfo().getTicketStates().size());
     }
 }
