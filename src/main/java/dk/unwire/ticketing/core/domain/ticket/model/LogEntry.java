@@ -47,4 +47,9 @@ public class LogEntry {
         this.nanoTime = System.nanoTime();
     }
 
+    protected LogEntry(TicketState ticketState, int errorCode) {
+        this(ticketState);
+        this.errorCode = errorCode;
+    }
+
 }

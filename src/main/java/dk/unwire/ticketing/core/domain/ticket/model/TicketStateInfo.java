@@ -44,10 +44,19 @@ public class TicketStateInfo {
     }
 
     public void updateState(CombinedState nextState) {
+        updateStateInfo(nextState);
+        this.logEntries.add(new LogEntry(this.latestTicketState));
+    }
+
+    public void updateState(CombinedState nextState, int errorCode) {
+        updateStateInfo(nextState);
+        this.logEntries.add(new LogEntry(this.latestTicketState, errorCode));
+    }
+
+    private void updateStateInfo(CombinedState nextState) {
         this.ticketState = nextState.ticketState().getState();
         this.transactionState = nextState.transactionState().getState();
         this.latestTicketState = new TicketState(nextState);
         this.ticketStates.add(this.latestTicketState);
-        this.logEntries.add(new LogEntry(this.latestTicketState));
     }
 }

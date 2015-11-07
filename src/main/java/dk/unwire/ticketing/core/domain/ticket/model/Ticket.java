@@ -96,13 +96,13 @@ public class Ticket extends PropertyMap<TicketProperty> {
         this.ticketStateInfo.updateState(nextState);
     }
 
-    public void nextStateTransactionError() {
+    public void nextStateTransactionError(int errorCode) {
         CombinedState nextState = StateMachine.transitionTransactionError(this.ticketStateInfo.asCombinedState());
-        this.ticketStateInfo.updateState(nextState);
+        this.ticketStateInfo.updateState(nextState, errorCode);
     }
 
-    public void nextStateTicketError() {
+    public void nextStateTicketError(int errorCode) {
         CombinedState nextState = StateMachine.transitionTicketError(this.ticketStateInfo.asCombinedState());
-        this.ticketStateInfo.updateState(nextState);
+        this.ticketStateInfo.updateState(nextState, errorCode);
     }
 }

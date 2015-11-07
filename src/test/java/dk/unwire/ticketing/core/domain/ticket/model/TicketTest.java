@@ -60,7 +60,7 @@ public class TicketTest {
         assertEquals(3, ticket.getTicketStateInfo().getLogEntries().size());
 
         // [8,1] -> [8,16]
-        ticket.nextStateTransactionError();
+        ticket.nextStateTransactionError(100);
 
         assertEquals(8, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
         assertEquals(16, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
@@ -68,7 +68,7 @@ public class TicketTest {
         assertEquals(4, ticket.getTicketStateInfo().getLogEntries().size());
 
         // [8,16] -> [16,16]
-        ticket.nextStateTicketError();
+        ticket.nextStateTicketError(200);
 
         assertEquals(16, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
         assertEquals(16, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
