@@ -90,26 +90,44 @@ public class Ticket extends PropertyMap<TicketProperty> {
         this.ticketStateInfo = new TicketStateInfo();
     }
 
+    /**
+     * Initializes a ticket is an initial state.
+     */
     public void initState() {
         CombinedState nextState = StateMachine.init();
         this.ticketStateInfo.updateState(nextState);
     }
 
+    /**
+     * Moves ticket to next OK state if allowed, else an IllegalStateException is thrown.
+     */
     public void nextStateOk() {
         CombinedState nextState = StateMachine.transitionOk(this.ticketStateInfo.asCombinedState());
         this.ticketStateInfo.updateState(nextState);
     }
 
+    /**
+     * Moves ticket to next transaction error state if allowed, else an IllegalStateException is thrown.
+     * @param errorCode Error code who will be added the the log entry.
+     */
     public void nextStateTransactionError(int errorCode) {
         CombinedState nextState = StateMachine.transitionTransactionError(this.ticketStateInfo.asCombinedState());
         this.ticketStateInfo.updateState(nextState, errorCode);
     }
 
+    /**
+     * Moves ticket to next ticket error state if allowed, else an IllegalStateException is thrown.
+     * @param errorCode Error code who will be added the the log entry.
+     */
     public void nextStateTicketError(int errorCode) {
         CombinedState nextState = StateMachine.transitionTicketError(this.ticketStateInfo.asCombinedState());
         this.ticketStateInfo.updateState(nextState, errorCode);
     }
 
+    /**
+     * Tries to perform refund on a ticket.
+     * @return Returns true if ticket is in a refundable state, else returns false.
+     */
     public boolean refundTicket() {
         boolean isRefunded = false;
 
@@ -124,6 +142,10 @@ public class Ticket extends PropertyMap<TicketProperty> {
         return isRefunded;
     }
 
+    /**
+     * Tries to perform activate on a ticket.
+     * @return Returns true if ticket is a state where activation is allowed, else returns false.
+     */
     public boolean activateTicket() {
         boolean isActivated = false;
 
@@ -139,6 +161,10 @@ public class Ticket extends PropertyMap<TicketProperty> {
 
     }
 
+    /**
+     * Tries to perform cancel on a ticket.
+     * @return Returns true if ticket is in a cancellable state, else returns false.
+     */
     public boolean cancelTicket() {
         boolean isCancelled = false;
 

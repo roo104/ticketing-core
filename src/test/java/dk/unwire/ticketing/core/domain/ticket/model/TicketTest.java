@@ -36,10 +36,9 @@ public class TicketTest {
     public void stateFromInitWithAuthFailToError() {
         // given a newly created ticket in initial state
         Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
-
-        // when/then ticket moves from state [1,0] -> [8,0] -> [8,1] -> [8,16] -> [16,16]
         assertTicketInState(ticket, TicketStateType.TICKET_ORDER_REQUEST_RECEIVED, TransactionStateType.TRANSACTION_NULL, 1);
 
+        // when/then ticket moves from state [1,0] -> [8,0] -> [8,1] -> [8,16] -> [16,16]
         // [1,0] -> [8,0]
         ticket.nextStateOk();
         assertTicketInState(ticket, TicketStateType.TICKET_ORDERED, TransactionStateType.TRANSACTION_NULL, 2);
