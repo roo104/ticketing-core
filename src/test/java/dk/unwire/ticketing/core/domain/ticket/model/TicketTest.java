@@ -31,7 +31,7 @@ public class TicketTest {
      * Ticket is created, but AUTH fails and ticket moves to error state.
      */
     @Test
-    public void initTicketState() {
+    public void stateFromInitWithAuthFailToError() {
         // given a newly created ticket in initial state
         Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
 
@@ -68,7 +68,7 @@ public class TicketTest {
         assertEquals(4, ticket.getTicketStateInfo().getLogEntries().size());
 
         // [8,16] -> [16,16]
-        ticket.nextStateTicketError(200);
+        ticket.nextStateTransactionError(200);
 
         assertEquals(16, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
         assertEquals(16, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());

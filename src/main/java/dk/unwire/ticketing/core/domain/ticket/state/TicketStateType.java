@@ -8,9 +8,9 @@ public enum TicketStateType {
     TICKET_ORDER_REQUEST_RECEIVED(1),
 
     /**
-     * This is then the order has been canceled.
+     * This is then the order has been cancelled.
      */
-    TICKET_CANCELED(4),
+    TICKET_CANCELLED(4),
 
     /**
      * This is then the order has been ordered.
