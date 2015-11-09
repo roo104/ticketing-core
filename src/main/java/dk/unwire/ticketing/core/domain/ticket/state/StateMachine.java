@@ -132,7 +132,7 @@ public class StateMachine {
             }
         }
         if (nextState == null) {
-            throw new IllegalStateException(String.format("CurrentState [%s, %s] -> [%s] not allowed", currentState.ticketState(), currentState.transactionState(), transitionType.name()));
+            throw new IllegalStateException(String.format("CurrentState [%s, %s] with transition [%s] not allowed", currentState.ticketState(), currentState.transactionState(), transitionType.name()));
         }
         return nextState;
     }

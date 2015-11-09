@@ -9,8 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class TicketTest {
 
@@ -75,6 +74,78 @@ public class TicketTest {
         assertEquals(5, ticket.getTicketStateInfo().getTicketStates().size());
         assertEquals(5, ticket.getTicketStateInfo().getLogEntries().size());
 
+    }
+
+    @Test
+    public void refundTicket() {
+        // given ticket in state [8,2]
+        Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
+        // [1,0] -> [8,0]
+        ticket.nextStateOk();
+        // [8,0] -> [8,1]
+        ticket.nextStateOk();
+        // [8,1] -> [8,4]
+        ticket.nextStateOk();
+        // [8,4] -> [8,2]
+        ticket.nextStateOk();
+
+        // when
+        boolean refundTicket = ticket.refundTicket();
+
+        // then
+        assertTrue(refundTicket);
+        assertEquals(64, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
+        assertEquals(2, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
+        assertEquals(6, ticket.getTicketStateInfo().getTicketStates().size());
+        assertEquals(6, ticket.getTicketStateInfo().getLogEntries().size());
+    }
+
+    @Test
+    public void activateTicket() {
+        // given ticket in state [8,2]
+        Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
+        // [1,0] -> [8,0]
+        ticket.nextStateOk();
+        // [8,0] -> [8,1]
+        ticket.nextStateOk();
+        // [8,1] -> [8,4]
+        ticket.nextStateOk();
+        // [8,4] -> [8,2]
+        ticket.nextStateOk();
+
+        // when
+        boolean activateTicket = ticket.activateTicket();
+
+        // then
+        assertTrue(activateTicket);
+        assertEquals(32, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
+        assertEquals(2, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
+        assertEquals(6, ticket.getTicketStateInfo().getTicketStates().size());
+        assertEquals(6, ticket.getTicketStateInfo().getLogEntries().size());
+    }
+
+    @Test
+    public void cancelTicket() {
+        // given ticket in state [8,2]
+        Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
+        // [1,0] -> [8,0]
+        ticket.nextStateOk();
+        // [8,0] -> [8,1]
+        ticket.nextStateOk();
+        // [8,1] -> [8,4]
+        ticket.nextStateOk();
+        // [8,4] -> [8,2]
+        ticket.nextStateOk();
+
+        // when
+        boolean activateTicket = ticket.cancelTicket();
+
+        // then
+        assertTrue(activateTicket);
+        assertEquals(4, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
+        assertEquals(2, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
+        assertEquals(6, ticket.getTicketStateInfo().getTicketStates().size());
+        assertEquals(6, ticket.getTicketStateInfo().getLogEntries().size());
     }
 
 }

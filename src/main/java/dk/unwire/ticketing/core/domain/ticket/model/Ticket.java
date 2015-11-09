@@ -7,6 +7,8 @@ import dk.unwire.ticketing.core.domain.product.model.Product;
 import dk.unwire.ticketing.core.domain.ticket.state.CombinedState;
 import dk.unwire.ticketing.core.domain.ticket.state.StateMachine;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -14,6 +16,8 @@ import java.time.ZonedDateTime;
 @Entity
 @AssociationOverride(name = "properties", joinColumns = @JoinColumn(name = "ticket_id", referencedColumnName = "id"))
 public class Ticket extends PropertyMap<TicketProperty> {
+
+    private static final Logger logger = LoggerFactory.getLogger(Ticket.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -104,5 +108,48 @@ public class Ticket extends PropertyMap<TicketProperty> {
     public void nextStateTicketError(int errorCode) {
         CombinedState nextState = StateMachine.transitionTicketError(this.ticketStateInfo.asCombinedState());
         this.ticketStateInfo.updateState(nextState, errorCode);
+    }
+
+    public boolean refundTicket() {
+        boolean isRefunded = false;
+
+        try {
+            CombinedState nextState = StateMachine.transitionTicketRefunded(this.ticketStateInfo.asCombinedState());
+            this.ticketStateInfo.updateState(nextState);
+            isRefunded = true;
+        } catch (IllegalStateException e) {
+            logger.error("ticketId[{}] Error refunding ticket, message: {}", this.id, e.getMessage());
+        }
+
+        return isRefunded;
+    }
+
+    public boolean activateTicket() {
+        boolean isActivated = false;
+
+        try {
+            CombinedState nextState = StateMachine.transitionTicketActivated(this.ticketStateInfo.asCombinedState());
+            this.ticketStateInfo.updateState(nextState);
+            isActivated = true;
+        } catch (IllegalStateException e) {
+            logger.error("ticketId[{}] Error activating ticket, message: {}", this.id, e.getMessage());
+        }
+
+        return isActivated;
+
+    }
+
+    public boolean cancelTicket() {
+        boolean isCancelled = false;
+
+        try {
+            CombinedState nextState = StateMachine.transitionTicketCancelled(this.ticketStateInfo.asCombinedState());
+            this.ticketStateInfo.updateState(nextState);
+            isCancelled = true;
+        } catch (IllegalStateException e) {
+            logger.error("ticketId[{}] Error cancelling ticket, message: {}", this.id, e.getMessage());
+        }
+
+        return isCancelled;
     }
 }
