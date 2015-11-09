@@ -5,11 +5,14 @@ import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
 import dk.unwire.ticketing.core.domain.product.model.Product;
 import dk.unwire.ticketing.core.domain.ticket.model.factory.TicketFactory;
+import dk.unwire.ticketing.core.domain.ticket.state.TicketStateType;
+import dk.unwire.ticketing.core.domain.ticket.state.TransactionStateType;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TicketTest {
 
@@ -35,97 +38,72 @@ public class TicketTest {
         Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
 
         // when/then ticket moves from state [1,0] -> [8,0] -> [8,1] -> [8,16] -> [16,16]
-        assertNotNull(ticket.getTicketStateInfo());
-        assertNotNull(ticket.getTicketStateInfo().getLatestTicketState());
-        assertEquals(1, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
-        assertEquals(0, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
-        assertEquals(1, ticket.getTicketStateInfo().getTicketStates().size());
-        assertEquals(1, ticket.getTicketStateInfo().getLogEntries().size());
+        assertTicketInState(ticket, TicketStateType.TICKET_ORDER_REQUEST_RECEIVED, TransactionStateType.TRANSACTION_NULL, 1);
 
         // [1,0] -> [8,0]
         ticket.nextStateOk();
-
-        assertEquals(8, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
-        assertEquals(0, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
-        assertEquals(2, ticket.getTicketStateInfo().getTicketStates().size());
-        assertEquals(2, ticket.getTicketStateInfo().getLogEntries().size());
+        assertTicketInState(ticket, TicketStateType.TICKET_ORDERED, TransactionStateType.TRANSACTION_NULL, 2);
 
         // [8,0] -> [8,1]
         ticket.nextStateOk();
-
-        assertEquals(8, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
-        assertEquals(1, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
-        assertEquals(3, ticket.getTicketStateInfo().getTicketStates().size());
-        assertEquals(3, ticket.getTicketStateInfo().getLogEntries().size());
+        assertTicketInState(ticket, TicketStateType.TICKET_ORDERED, TransactionStateType.TRANSACTION_INITIALIZED, 3);
 
         // [8,1] -> [8,16]
         ticket.nextStateTransactionError(100);
-
-        assertEquals(8, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
-        assertEquals(16, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
-        assertEquals(4, ticket.getTicketStateInfo().getTicketStates().size());
-        assertEquals(4, ticket.getTicketStateInfo().getLogEntries().size());
+        assertTicketInState(ticket, TicketStateType.TICKET_ORDERED, TransactionStateType.TRANSACTION_ERROR, 4);
 
         // [8,16] -> [16,16]
         ticket.nextStateTransactionError(200);
-
-        assertEquals(16, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
-        assertEquals(16, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
-        assertEquals(5, ticket.getTicketStateInfo().getTicketStates().size());
-        assertEquals(5, ticket.getTicketStateInfo().getLogEntries().size());
-
+        assertTicketInState(ticket, TicketStateType.TICKET_ERROR, TransactionStateType.TRANSACTION_ERROR, 5);
     }
 
     @Test
     public void refundTicket() {
         // given ticket in state [8,2]
-        Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
-        // [1,0] -> [8,0]
-        ticket.nextStateOk();
-        // [8,0] -> [8,1]
-        ticket.nextStateOk();
-        // [8,1] -> [8,4]
-        ticket.nextStateOk();
-        // [8,4] -> [8,2]
-        ticket.nextStateOk();
+        Ticket ticket = givenTicketInOrderedBilled();
 
         // when
         boolean refundTicket = ticket.refundTicket();
 
         // then
         assertTrue(refundTicket);
-        assertEquals(64, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
-        assertEquals(2, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
-        assertEquals(6, ticket.getTicketStateInfo().getTicketStates().size());
-        assertEquals(6, ticket.getTicketStateInfo().getLogEntries().size());
+        assertTicketInState(ticket, TicketStateType.TICKET_RETURNED, TransactionStateType.TRANSACTION_BILLED, 6);
     }
 
     @Test
     public void activateTicket() {
         // given ticket in state [8,2]
-        Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
-        // [1,0] -> [8,0]
-        ticket.nextStateOk();
-        // [8,0] -> [8,1]
-        ticket.nextStateOk();
-        // [8,1] -> [8,4]
-        ticket.nextStateOk();
-        // [8,4] -> [8,2]
-        ticket.nextStateOk();
+        Ticket ticket = givenTicketInOrderedBilled();
 
         // when
         boolean activateTicket = ticket.activateTicket();
 
         // then
         assertTrue(activateTicket);
-        assertEquals(32, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
-        assertEquals(2, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
-        assertEquals(6, ticket.getTicketStateInfo().getTicketStates().size());
-        assertEquals(6, ticket.getTicketStateInfo().getLogEntries().size());
+        assertTicketInState(ticket, TicketStateType.TICKET_DELIVERED, TransactionStateType.TRANSACTION_BILLED, 6);
     }
 
     @Test
     public void cancelTicket() {
+        // given ticket in state [8,2]
+        Ticket ticket = givenTicketInOrderedBilled();
+
+        // when
+        boolean activateTicket = ticket.cancelTicket();
+
+        // then
+        assertTrue(activateTicket);
+        assertTicketInState(ticket, TicketStateType.TICKET_CANCELLED, TransactionStateType.TRANSACTION_BILLED, 6);
+    }
+
+    private void assertTicketInState(Ticket ticket, TicketStateType ticketStateType, TransactionStateType transactionStateType, int numberOfLogsAndStates) {
+        assertEquals(ticketStateType.getState(), ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
+        assertEquals(transactionStateType.getState(), ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
+        assertEquals(numberOfLogsAndStates, ticket.getTicketStateInfo().getTicketStates().size());
+        assertEquals(numberOfLogsAndStates, ticket.getTicketStateInfo().getLogEntries().size());
+    }
+
+    private Ticket givenTicketInOrderedBilled() {
         // given ticket in state [8,2]
         Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
         // [1,0] -> [8,0]
@@ -136,16 +114,7 @@ public class TicketTest {
         ticket.nextStateOk();
         // [8,4] -> [8,2]
         ticket.nextStateOk();
-
-        // when
-        boolean activateTicket = ticket.cancelTicket();
-
-        // then
-        assertTrue(activateTicket);
-        assertEquals(4, ticket.getTicketStateInfo().getLatestTicketState().getTicketState());
-        assertEquals(2, ticket.getTicketStateInfo().getLatestTicketState().getTransactionState());
-        assertEquals(6, ticket.getTicketStateInfo().getTicketStates().size());
-        assertEquals(6, ticket.getTicketStateInfo().getLogEntries().size());
+        return ticket;
     }
 
 }
