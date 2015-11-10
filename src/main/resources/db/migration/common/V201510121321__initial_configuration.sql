@@ -422,13 +422,13 @@ CREATE TABLE `ticket_property` (
 /*Table structure for table `ticket_state` */
 
 CREATE TABLE `ticket_state` (
-  `id`                INT(11)   NOT NULL AUTO_INCREMENT,
-  `ticket_state`      INT(11)   NOT NULL DEFAULT '0',
-  `transaction_state` INT(11)   NOT NULL DEFAULT '0',
-  `action`            INT(11)   NOT NULL DEFAULT '0',
-  `error_code`        INT(11)   NOT NULL DEFAULT '0',
-  `timestamp`         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `ticket_id`         INT(11)   NOT NULL,
+  `id`                BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `ticket_state`      INT(11)    NOT NULL DEFAULT '0',
+  `transaction_state` INT(11)    NOT NULL DEFAULT '0',
+  `action`            INT(11)    NOT NULL DEFAULT '0',
+  `error_code`        INT(11)    NOT NULL DEFAULT '0',
+  `timestamp`         TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ticket_id`         INT(11)    NOT NULL,
   PRIMARY KEY (`id`),
   KEY `ticket_state` (`id`, `ticket_id`),
   KEY `ticket_id_state` (`ticket_id`, `id`)

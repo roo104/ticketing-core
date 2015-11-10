@@ -1,5 +1,6 @@
 package dk.unwire.ticketing.core.domain.ticket.model;
 
+import dk.unwire.ticketing.core.domain.ticket.state.CombinedState;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ public class TicketState {
     @Getter
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Getter
     @Column(name = "ticket_state")
     private int ticketState;
@@ -26,4 +27,12 @@ public class TicketState {
     @Column(name = "error_code")
     private int errorCode;
 
+    private TicketState() {
+    }
+
+    public TicketState(CombinedState state) {
+        this.ticketState = state.ticketState().getState();
+        this.transactionState = state.transactionState().getState();
+
+    }
 }

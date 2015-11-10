@@ -4,15 +4,20 @@ import dk.unwire.ticketing.core.common.model.PropertyMap;
 import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.product.model.Product;
+import dk.unwire.ticketing.core.domain.ticket.state.CombinedState;
+import dk.unwire.ticketing.core.domain.ticket.state.StateMachine;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Collection;
 
 @Entity
 @AssociationOverride(name = "properties", joinColumns = @JoinColumn(name = "ticket_id", referencedColumnName = "id"))
 public class Ticket extends PropertyMap<TicketProperty> {
+
+    private static final Logger logger = LoggerFactory.getLogger(Ticket.class);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,9 +50,6 @@ public class Ticket extends PropertyMap<TicketProperty> {
     @Embedded
     private TicketPrice ticketPrice;
     @Getter
-    @Column(name = "last_status_time")
-    private ZonedDateTime lastStatusTime;
-    @Getter
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
@@ -63,7 +65,7 @@ public class Ticket extends PropertyMap<TicketProperty> {
     private String type;
     @Getter
     @Embedded
-    private LatestTicketState latestTicketState;
+    private TicketStateInfo ticketStateInfo;
     @Getter
     @Column(name = "order_channel_id")
     private Integer orderChannelId;
@@ -76,13 +78,104 @@ public class Ticket extends PropertyMap<TicketProperty> {
     @Getter
     @Column(name = "ticket_variant")
     private Integer ticketVariant;
-    @Getter
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "ticket_id", referencedColumnName = "id")
-    private Collection<LogEntry> logEntries;
-    @Getter
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "ticket_id", referencedColumnName = "id")
-    private Collection<TicketState> ticketStates;
 
+    private Ticket() {
+    }
+
+    public Ticket(Account account, Product product) {
+        this.account = account;
+        this.product = product;
+        this.buyTime = ZonedDateTime.now();
+        this.type = product.getType();
+        this.ticketStateInfo = new TicketStateInfo();
+    }
+
+    /**
+     * Initializes a ticket is an initial state.
+     */
+    public void initState() {
+        CombinedState nextState = StateMachine.init();
+        this.ticketStateInfo.updateState(nextState);
+    }
+
+    /**
+     * Moves ticket to next OK state if allowed, else an IllegalStateException is thrown.
+     */
+    public void nextStateOk() {
+        CombinedState nextState = StateMachine.transitionOk(this.ticketStateInfo.asCombinedState());
+        this.ticketStateInfo.updateState(nextState);
+    }
+
+    /**
+     * Moves ticket to next transaction error state if allowed, else an IllegalStateException is thrown.
+     * @param errorCode Error code who will be added the the log entry.
+     */
+    public void nextStateTransactionError(int errorCode) {
+        CombinedState nextState = StateMachine.transitionTransactionError(this.ticketStateInfo.asCombinedState());
+        this.ticketStateInfo.updateState(nextState, errorCode);
+    }
+
+    /**
+     * Moves ticket to next ticket error state if allowed, else an IllegalStateException is thrown.
+     * @param errorCode Error code who will be added the the log entry.
+     */
+    public void nextStateTicketError(int errorCode) {
+        CombinedState nextState = StateMachine.transitionTicketError(this.ticketStateInfo.asCombinedState());
+        this.ticketStateInfo.updateState(nextState, errorCode);
+    }
+
+    /**
+     * Tries to perform refund on a ticket.
+     * @return Returns true if ticket is in a refundable state, else returns false.
+     */
+    public boolean refundTicket() {
+        boolean isRefunded = false;
+
+        try {
+            CombinedState nextState = StateMachine.transitionTicketRefunded(this.ticketStateInfo.asCombinedState());
+            this.ticketStateInfo.updateState(nextState);
+            isRefunded = true;
+        } catch (IllegalStateException e) {
+            logger.error("ticketId[{}] Error refunding ticket, message: {}", this.id, e.getMessage());
+        }
+
+        return isRefunded;
+    }
+
+    /**
+     * Tries to perform activate on a ticket.
+     * @return Returns true if ticket is a state where activation is allowed, else returns false.
+     */
+    public boolean activateTicket() {
+        boolean isActivated = false;
+
+        try {
+            CombinedState nextState = StateMachine.transitionTicketActivated(this.ticketStateInfo.asCombinedState());
+            this.ticketStateInfo.updateState(nextState);
+            isActivated = true;
+        } catch (IllegalStateException e) {
+            logger.error("ticketId[{}] Error activating ticket, message: {}", this.id, e.getMessage());
+        }
+
+        return isActivated;
+
+    }
+
+    /**
+     * Tries to perform cancel on a ticket.
+     * @return Returns true if ticket is in a cancellable state, else returns false.
+     */
+    public boolean cancelTicket() {
+        boolean isCancelled = false;
+
+        try {
+            CombinedState nextState = StateMachine.transitionTicketCancelled(this.ticketStateInfo.asCombinedState());
+            this.ticketStateInfo.updateState(nextState);
+            isCancelled = true;
+        } catch (IllegalStateException e) {
+            logger.error("ticketId[{}] Error cancelling ticket, message: {}", this.id, e.getMessage());
+        }
+
+        return isCancelled;
+    }
 }
