@@ -1,13 +1,13 @@
 package dk.unwire.ticketing.core.domain.account.service;
 
-import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
 import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.account.model.AccountIdentifier;
 import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
 import dk.unwire.ticketing.core.domain.account.repository.AccountIdentifierRepository;
 import dk.unwire.ticketing.core.domain.account.repository.AccountRepository;
-import dk.unwire.ticketing.core.domain.otp.model.OtpConfirmRequestVO;
-import dk.unwire.ticketing.core.domain.otp.rest.model.confirm.OtpConfirmRequest;
+import dk.unwire.ticketing.spring.rest.common.header.MticketIdentifierType;
+import dk.unwire.ticketing.spring.rest.domain.otp.request.OTPConfirmationRequest;
+import dk.unwire.ticketing.spring.rest.domain.otp.request.vo.OtpConfirmRequestVO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class AccountServiceTest {
 
     @Before
     public void setUp() {
-        OtpConfirmRequest otpConfirmRequest = new OtpConfirmRequest(MSISDN, OTP);
+		OTPConfirmationRequest otpConfirmRequest = new OTPConfirmationRequest(MSISDN, OTP);
         OtpConfirmRequestVO otpConfirmRequestVO = otpConfirmRequest.generateOtpConfirmRequestVO(APPLICATION_ID);
         this.findOrCreateAccountVO = FindOrCreateAccountVO.fromOtpConfirmRequestVO(otpConfirmRequestVO);
         this.accountIdentifier = AccountIdentifier.builder()
@@ -50,7 +50,8 @@ public class AccountServiceTest {
     @Test
     public void accountIdentifierNotFoundCreateAccountAndAccountIdentifier() {
         //given
-        given(this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(anyString(), any(IdentifierType.class), anyInt())).willReturn(null);
+        given(this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(anyString(),
+				any(MticketIdentifierType.class), anyInt())).willReturn(null);
         //when
         AccountIdentifier accountIdentifier = this.classUnderTest.findOrCreateAccount(this.findOrCreateAccountVO);
         //then
@@ -61,7 +62,8 @@ public class AccountServiceTest {
     @Test
     public void findAccountFromIdentifierShouldReturnAccountIdentifier() {
         //given
-        given(this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(anyString(), any(IdentifierType.class), anyInt())).willReturn(this.accountIdentifier);
+        given(this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(anyString(),
+				any(MticketIdentifierType.class), anyInt())).willReturn(this.accountIdentifier);
         //when
         AccountIdentifier accountIdentifier = this.classUnderTest.findOrCreateAccount(this.findOrCreateAccountVO);
         //then

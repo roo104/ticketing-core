@@ -1,12 +1,12 @@
 package dk.unwire.ticketing.core.domain.ticket.model;
 
-import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
 import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
 import dk.unwire.ticketing.core.domain.product.model.Product;
 import dk.unwire.ticketing.core.domain.ticket.model.factory.TicketFactory;
 import dk.unwire.ticketing.core.domain.ticket.state.TicketStateType;
 import dk.unwire.ticketing.core.domain.ticket.state.TransactionStateType;
+import dk.unwire.ticketing.spring.rest.common.header.MticketIdentifierType;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,8 @@ public class TicketTest {
     public void setup() {
         this.ticketFactory = new TicketFactory();
 
-        FindOrCreateAccountVO findOrCreateAccountVO = new FindOrCreateAccountVO(1, "4511111111", IdentifierType.MSISDN);
+        FindOrCreateAccountVO findOrCreateAccountVO = new FindOrCreateAccountVO(1, "4511111111",
+				MticketIdentifierType.MSISDN);
         this.account = Account.findOrCreateAccount(findOrCreateAccountVO);
     }
 

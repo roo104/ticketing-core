@@ -22,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -49,7 +50,6 @@ public class OtpControllerIT {
         this.mockMvc = webAppContextSetup(this.webApplicationContext).addFilter(this.requestIdFilter).build();
         this.httpHeaders = new HttpHeaders();
         this.httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-
     }
 
     /**
@@ -62,9 +62,20 @@ public class OtpControllerIT {
     @Test
     public void requestOtpAllOk() throws Exception {
         this.mockMvc.perform(post("/v1/1/otp/")
-                .content("{\"msisdn\": 4551967719}")
+                .content("{\"msisdn\": 4571378012}")
                 .headers(this.httpHeaders))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+	@Ignore
+	@Test
+	public void thatOTPConfirmationWorks() throws Exception {
+
+		this.mockMvc.perform(put("/v1/1/otp/confirm/")
+				.content("{\"msisdn\":\"4571378012\",\"otp\": \"8044\"}")
+				.headers(this.httpHeaders))
+				.andExpect(status().isOk())
+				.andDo(print());
+	}
 }

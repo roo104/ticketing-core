@@ -1,7 +1,7 @@
 package dk.unwire.ticketing.core.domain.account.model;
 
-import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
-import dk.unwire.ticketing.core.domain.otp.model.OtpConfirmRequestVO;
+import dk.unwire.ticketing.spring.rest.common.header.MticketIdentifierType;
+import dk.unwire.ticketing.spring.rest.domain.otp.request.vo.OtpConfirmRequestVO;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ public final class FindOrCreateAccountVO {
     @Getter
     private final String identifier;
     @Getter
-    private final IdentifierType identifierType;
+    private final MticketIdentifierType identifierType;
 
     public static FindOrCreateAccountVO fromOtpConfirmRequestVO(OtpConfirmRequestVO otpConfirmRequestVO) {
         return new FindOrCreateAccountVO(
