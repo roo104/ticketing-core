@@ -1,6 +1,6 @@
 package dk.unwire.ticketing.core.domain.account.model;
 
-import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
+import dk.unwire.ticketing.spring.rest.common.header.MticketIdentifierType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ public final class AccountIdentifier {
     @Getter
     @Column(name = "identifier_type")
     @Enumerated(EnumType.ORDINAL)
-    private IdentifierType identifierType;
+    private MticketIdentifierType identifierType;
     @Getter
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
@@ -44,7 +44,7 @@ public final class AccountIdentifier {
     public static final class Builder {
         private int applicationId;
         private String identifier;
-        private IdentifierType identifierType;
+        private MticketIdentifierType identifierType;
         private Account account;
 
         private Builder() {
@@ -60,7 +60,7 @@ public final class AccountIdentifier {
             return this;
         }
 
-        public Builder identifierType(IdentifierType identifierType) {
+        public Builder identifierType(MticketIdentifierType identifierType) {
             this.identifierType = identifierType;
             return this;
         }

@@ -5,7 +5,6 @@ import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
 import dk.unwire.ticketing.core.domain.account.service.AccountService;
 import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.application.service.ApplicationService;
-import dk.unwire.ticketing.core.domain.otp.model.OtpConfirmRequestVO;
 import dk.unwire.ticketing.core.domain.otp.model.OtpRequestVO;
 import dk.unwire.ticketing.core.domain.otp.service.OtpService;
 import dk.unwire.ticketing.core.domain.otp.service.model.confirm.IvsRequestConfirmOtpVO;
@@ -13,6 +12,7 @@ import dk.unwire.ticketing.core.domain.otp.service.model.register.IvsRequestOtpV
 import dk.unwire.ticketing.core.domain.systemproperty.enums.SystemPropertyEnum;
 import dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperty;
 import dk.unwire.ticketing.core.domain.systemproperty.service.SystemPropertyService;
+import dk.unwire.ticketing.spring.rest.domain.otp.request.vo.OtpConfirmRequestVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

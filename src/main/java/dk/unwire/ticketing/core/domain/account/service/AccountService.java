@@ -1,11 +1,11 @@
 package dk.unwire.ticketing.core.domain.account.service;
 
-import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
 import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.account.model.AccountIdentifier;
 import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
 import dk.unwire.ticketing.core.domain.account.repository.AccountIdentifierRepository;
 import dk.unwire.ticketing.core.domain.account.repository.AccountRepository;
+import dk.unwire.ticketing.spring.rest.common.header.MticketIdentifierType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class AccountService {
 
     public AccountIdentifier findOrCreateAccount(FindOrCreateAccountVO findOrCreateAccountVO) {
         String identifier = findOrCreateAccountVO.getIdentifier();
-        IdentifierType identifierType = findOrCreateAccountVO.getIdentifierType();
+		MticketIdentifierType identifierType = findOrCreateAccountVO.getIdentifierType();
         int applicationId = findOrCreateAccountVO.getApplicationId();
 
         AccountIdentifier accountIdentifier = this.accountIdentifierRepository.findByIdentifierAndIdentifierTypeAndApplicationId(

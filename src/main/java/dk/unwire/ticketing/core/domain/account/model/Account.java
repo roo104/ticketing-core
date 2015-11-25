@@ -1,7 +1,7 @@
 package dk.unwire.ticketing.core.domain.account.model;
 
 import com.unwire.mticket.util.collection.CollectionUtil;
-import dk.unwire.ticketing.core.domain.account.enums.IdentifierType;
+import dk.unwire.ticketing.spring.rest.common.header.MticketIdentifierType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,13 +21,13 @@ public final class Account {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "application_id")
+	@Column(name = "application_id") @Getter
     private int applicationId;
     @Column(name = "created")
     private ZonedDateTime created;
     @Column(name = "blacklisted")
     private boolean blacklisted;
-    @Column(name = "blacklist_expiredate")
+    @Column(name = "blacklist_expiredate") @Getter
     private ZonedDateTime blacklistExpiredate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
     private Collection<AccountIdentifier> accountIdentifiers;
@@ -62,7 +61,7 @@ public final class Account {
      * @return String represending an MSISDN or NULL of no MSISDN is assosiated with this account.
      */
     public String getMsisdn() {
-        return getAccountIdentifierValue(IdentifierType.MSISDN);
+        return getAccountIdentifierValue(MticketIdentifierType.MSISDN);
     }
 
     /**
@@ -71,10 +70,10 @@ public final class Account {
      * @return String represending a Car Registration Number or NULL of no Car Registration Number is assosiated with this account.
      */
     public String getCarRegistrationNumber() {
-        return getAccountIdentifierValue(IdentifierType.LICENSE_PLATE);
+        return getAccountIdentifierValue(MticketIdentifierType.LICENSE_PLATE);
     }
 
-    public String getAccountIdentifierValue(IdentifierType identifierType) {
+    public String getAccountIdentifierValue(MticketIdentifierType identifierType) {
         String identifierValue = null;
 
         AccountIdentifier identifier = getAccountIdentifier(identifierType);
@@ -84,18 +83,24 @@ public final class Account {
         return identifierValue;
     }
 
-    public AccountIdentifier getAccountIdentifier(IdentifierType type) {
+    public AccountIdentifier getAccountIdentifier(MticketIdentifierType type) {
         AccountIdentifier accountIdentifier = null;
         if (CollectionUtil.isNotEmpty(this.accountIdentifiers)) {
-            Iterator<AccountIdentifier> iterator = this.accountIdentifiers.iterator();
-            while (iterator.hasNext()) {
-                AccountIdentifier identifier = iterator.next();
-                if (identifier.getAccount().getId() == this.id && identifier.getIdentifierType() == type) {
-                    accountIdentifier = identifier;
-                    break;
-                }
-            }
+			for (AccountIdentifier identifier : this.accountIdentifiers) {
+				if (identifier.getAccount().getId() == this.id && identifier.getIdentifierType().equals(type)) {
+					accountIdentifier = identifier;
+					break;
+				}
+			}
         }
         return accountIdentifier;
     }
+
+	public ZonedDateTime getCreated() {
+		return this.created;
+	}
+
+	public int getApplicationId() {
+		return this.applicationId;
+	}
 }
