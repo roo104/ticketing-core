@@ -2,9 +2,7 @@ package dk.unwire.ticketing.core.domain.account.model;
 
 import com.unwire.mticket.util.collection.CollectionUtil;
 import dk.unwire.ticketing.spring.rest.common.header.MticketIdentifierType;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.ZoneOffset;
@@ -13,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Account {
 
     @Getter
@@ -21,34 +18,44 @@ public final class Account {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-	@Column(name = "application_id") @Getter
-    private int applicationId;
+    @Column(name = "application_id")
+    @Getter
+    private final Integer applicationId;
     @Column(name = "created")
     private ZonedDateTime created;
-    @Column(name = "blacklisted")
-    private boolean blacklisted;
-    @Column(name = "blacklist_expiredate") @Getter
-    private ZonedDateTime blacklistExpiredate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
     private Collection<AccountIdentifier> accountIdentifiers;
 
-    private Account(FindOrCreateAccountVO findOrCreateAccountVO) {
+    private Account() {
+        this.created = null;
         this.accountIdentifiers = new ArrayList<>();
-        this.applicationId = findOrCreateAccountVO.getApplicationId();
-        this.created = ZonedDateTime.now(ZoneOffset.UTC);
+        this.applicationId = null;
+    }
 
-        AccountIdentifier accountIdentifier = AccountIdentifier.builder()
-                .applicationId(this.applicationId)
-                .identifier(findOrCreateAccountVO.getIdentifier())
-                .identifierType(findOrCreateAccountVO.getIdentifierType())
-                .account(this)
-                .build();
-        addAccountIdentifier(accountIdentifier);
+    public Account(Integer applicationId, MticketIdentifierType identifierType, String identifierValue) {
+        this.created = ZonedDateTime.now(ZoneOffset.UTC);
+        this.accountIdentifiers = new ArrayList<>();
+        this.applicationId = applicationId;
+        addAccountIdentifier(identifierType, identifierValue);
+    }
+
+    private Account(FindOrCreateAccountVO findOrCreateAccountVO) {
+        this(findOrCreateAccountVO.getApplicationId(), findOrCreateAccountVO.getIdentifierType(), findOrCreateAccountVO.getIdentifier());
     }
 
     public static Account findOrCreateAccount(FindOrCreateAccountVO findOrCreateAccountVO) {
 
         return new Account(findOrCreateAccountVO);
+    }
+
+    public void addAccountIdentifier(MticketIdentifierType identifierType, String identifierValue) {
+        AccountIdentifier accountIdentifier = AccountIdentifier.builder()
+                .applicationId(this.applicationId)
+                .identifier(identifierValue)
+                .identifierType(identifierType)
+                .account(this)
+                .build();
+        addAccountIdentifier(accountIdentifier);
     }
 
     public void addAccountIdentifier(AccountIdentifier accountIdentifier) {
@@ -86,21 +93,21 @@ public final class Account {
     public AccountIdentifier getAccountIdentifier(MticketIdentifierType type) {
         AccountIdentifier accountIdentifier = null;
         if (CollectionUtil.isNotEmpty(this.accountIdentifiers)) {
-			for (AccountIdentifier identifier : this.accountIdentifiers) {
-				if (identifier.getAccount().getId() == this.id && identifier.getIdentifierType().equals(type)) {
-					accountIdentifier = identifier;
-					break;
-				}
-			}
+            for (AccountIdentifier identifier : this.accountIdentifiers) {
+                if (identifier.getAccount().getId() == this.id && identifier.getIdentifierType().equals(type)) {
+                    accountIdentifier = identifier;
+                    break;
+                }
+            }
         }
         return accountIdentifier;
     }
 
-	public ZonedDateTime getCreated() {
-		return this.created;
-	}
+    public ZonedDateTime getCreated() {
+        return this.created;
+    }
 
-	public int getApplicationId() {
-		return this.applicationId;
-	}
+    public int getApplicationId() {
+        return this.applicationId;
+    }
 }

@@ -4,12 +4,18 @@ import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
 import dk.unwire.ticketing.core.domain.product.model.Product;
 import dk.unwire.ticketing.core.domain.ticket.model.factory.TicketFactory;
+import dk.unwire.ticketing.core.domain.ticket.model.vo.PaymentType;
+import dk.unwire.ticketing.core.domain.ticket.model.vo.TicketIssuingType;
+import dk.unwire.ticketing.core.domain.ticket.model.vo.TicketOrder;
 import dk.unwire.ticketing.core.domain.ticket.state.TicketStateType;
 import dk.unwire.ticketing.core.domain.ticket.state.TransactionStateType;
 import dk.unwire.ticketing.spring.rest.common.header.MticketIdentifierType;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collection;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,14 +25,17 @@ public class TicketTest {
     @Autowired
     private TicketFactory ticketFactory;
 
-    private Account account;
+    Account account;
+    Collection<Product> products;
 
     @Before
     public void setup() {
         this.ticketFactory = new TicketFactory();
+        this.products = new HashSet<>();
+        this.products.add(new Product());
 
         FindOrCreateAccountVO findOrCreateAccountVO = new FindOrCreateAccountVO(1, "4511111111",
-				MticketIdentifierType.MSISDN);
+                MticketIdentifierType.MSISDN);
         this.account = Account.findOrCreateAccount(findOrCreateAccountVO);
     }
 
@@ -36,7 +45,8 @@ public class TicketTest {
     @Test
     public void stateFromInitWithAuthFailToError() {
         // given a newly created ticket in initial state
-        Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
+        TicketOrder ticketOrder = this.ticketFactory.createTickets(TicketIssuingType.ONE_TICKET_FOR_ALL_PRODUCTS, this.account, this.products, PaymentType.NO_PAYMENT);
+        Ticket ticket = ticketOrder.getBillingTicket();
         assertTicketInState(ticket, TicketStateType.TICKET_ORDER_REQUEST_RECEIVED, TransactionStateType.TRANSACTION_NULL, 1);
 
         // when/then ticket moves from state [1,0] -> [8,0] -> [8,1] -> [8,16] -> [16,16]
@@ -105,7 +115,8 @@ public class TicketTest {
 
     private Ticket givenTicketInOrderedBilled() {
         // given ticket in state [8,2]
-        Ticket ticket = this.ticketFactory.buildTicket(this.account, new Product());
+        TicketOrder ticketOrder = this.ticketFactory.createTickets(TicketIssuingType.ONE_TICKET_FOR_ALL_PRODUCTS, this.account, this.products, PaymentType.NO_PAYMENT);
+        Ticket ticket = ticketOrder.getBillingTicket();
         // [1,0] -> [8,0]
         ticket.nextStateOk();
         // [8,0] -> [8,1]

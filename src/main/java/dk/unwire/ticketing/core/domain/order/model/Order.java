@@ -32,4 +32,5 @@ public class Order extends PropertyMap<OrderProperty> {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Collection<OrderLog> orderLogs;
 
+
 }

@@ -4,9 +4,12 @@ import dk.unwire.ticketing.core.common.model.PropertyMap;
 import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.product.model.Product;
+import dk.unwire.ticketing.core.domain.ticket.model.vo.PaymentType;
+import dk.unwire.ticketing.core.domain.ticket.model.vo.TicketKinship;
 import dk.unwire.ticketing.core.domain.ticket.state.CombinedState;
 import dk.unwire.ticketing.core.domain.ticket.state.StateMachine;
 import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +64,7 @@ public class Ticket extends PropertyMap<TicketProperty> {
     @JoinColumn(name = "tariff", referencedColumnName = "id")
     private Product product;
     @Getter
+    @Setter
     @Column(name = "type")
     private String type;
     @Getter
@@ -70,8 +74,9 @@ public class Ticket extends PropertyMap<TicketProperty> {
     @Column(name = "order_channel_id")
     private Integer orderChannelId;
     @Getter
+    @Setter
     @Column(name = "ticket_kinship")
-    private Integer ticketKinship;
+    private TicketKinship ticketKinship;
     @Getter
     @Column(name = "parent_ticket_id")
     private Long parentTicketId;
@@ -82,12 +87,22 @@ public class Ticket extends PropertyMap<TicketProperty> {
     private Ticket() {
     }
 
-    public Ticket(Account account, Product product) {
+    public Ticket(Account account, Product product, PaymentType paymentType) {
         this.account = account;
         this.product = product;
         this.buyTime = ZonedDateTime.now();
         this.type = product.getType();
         this.ticketStateInfo = new TicketStateInfo();
+        this.ticketPrice = new TicketPrice(product.getPrice(), paymentType);
+        initState();
+    }
+
+    public Ticket(Account account, Integer price, PaymentType paymentType) {
+        this.account = account;
+        this.buyTime = ZonedDateTime.now();
+        this.ticketStateInfo = new TicketStateInfo();
+        this.ticketPrice = new TicketPrice(price, paymentType);
+        initState();
     }
 
     /**
