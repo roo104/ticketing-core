@@ -19,6 +19,7 @@ public class Order extends PropertyMap<OrderProperty> {
     private long id;
     @Getter
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private Collection<Item> items;
     @Getter
     @Embedded
@@ -28,6 +29,7 @@ public class Order extends PropertyMap<OrderProperty> {
     private String note;
     @Getter
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private Collection<OrderLog> orderLogs;
 
     public String getRedirectUrl() {
