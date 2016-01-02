@@ -305,7 +305,7 @@ CREATE TABLE `order_log` (
   `id`        BIGINT(20) NOT NULL AUTO_INCREMENT,
   `state`     INT(4)     NOT NULL,
   `timestamp` TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `order_id`  BIGINT(20) NOT NULL,
+  `order_id`  BIGINT(20),
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`)
 )
@@ -316,7 +316,7 @@ CREATE TABLE `order_item` (
   `id`            BIGINT(20) NOT NULL AUTO_INCREMENT,
   `product_id`    INT(11)    NOT NULL,
   `product_count` INT(11)    NOT NULL,
-  `order_id`      BIGINT(20) NOT NULL,
+  `order_id`      BIGINT(20),
   PRIMARY KEY (`id`),
   INDEX `order_id` (`order_id`)
 )

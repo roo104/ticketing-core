@@ -1,6 +1,8 @@
 package dk.unwire.ticketing.core.domain.order.rest;
 
 import dk.unwire.ticketing.core.TicketingCoreApplication;
+import dk.unwire.ticketing.core.domain.order.model.Order;
+import dk.unwire.ticketing.core.domain.order.service.OrderService;
 import dk.unwire.ticketing.spring.rest.common.response.GenericResponseInfo;
 import dk.unwire.ticketing.spring.rest.config.filter.requestid.RequestIdFilter;
 import org.junit.Before;
@@ -39,6 +41,8 @@ public class OrderControllerTest {
     private WebApplicationContext webApplicationContext;
     @Autowired
     private RequestIdFilter requestIdFilter;
+    @Autowired
+    private OrderService orderService;
 
     private HttpHeaders httpHeaders;
 
@@ -50,29 +54,35 @@ public class OrderControllerTest {
     }
 
     @Test
-    public void testCreateOrder() throws Exception {
+    public void createEmptyOrder() throws Exception {
         // when
-        ResultActions resultActions = this.mockMvc.perform(post("/v1/1/order")
-                .content("{\"msisdn\": 4571378012}")
+        ResultActions resultActions = this.mockMvc.perform(post("/v1/order")
                 .headers(this.httpHeaders))
                 .andDo(print());
 
         // then
         resultActions.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.orderId").isNumber())
                 .andExpect(jsonPath("$.status.code", is(GenericResponseInfo.OK.getStatus())))
                 .andExpect(jsonPath("$.status.requestId").exists());
     }
 
     @Test
-    public void testUpdateOrder() throws Exception {
+    public void updateAndCheckoutOrder() throws Exception {
+        // given and order
+        Order emptyOrder = this.orderService.createEmptyOrder();
+
+        String body = "{\"items\":[{\"productCount\":1,\"productId\":1},{\"productCount\":1,\"productId\":3}],\"properties\":[{\"name\":\"key1\",\"value\":\"value1\"},{\"name\":\"key2\",\"value\":\"value2\"}],\"note\":\"Some note associated with the Order\"}";
+
         // when
-        ResultActions resultActions = this.mockMvc.perform(put("/v1/1/order")
-                .content("{\"msisdn\": 4571378012}")
+        ResultActions resultActions = this.mockMvc.perform(put("/v1/order/{orderId}", emptyOrder.getId())
+                .content(body)
                 .headers(this.httpHeaders))
                 .andDo(print());
 
         // then
         resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.checkout.totalAmount").isNumber())
                 .andExpect(jsonPath("$.status.code", is(GenericResponseInfo.OK.getStatus())))
                 .andExpect(jsonPath("$.status.requestId").exists());
     }
