@@ -5,7 +5,6 @@ import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.product.model.Product;
 import dk.unwire.ticketing.core.domain.ticket.model.vo.PaymentType;
-import dk.unwire.ticketing.core.domain.ticket.model.vo.TicketIssuingType;
 import dk.unwire.ticketing.core.domain.ticket.model.vo.TicketKinship;
 import dk.unwire.ticketing.core.domain.ticket.state.CombinedState;
 import dk.unwire.ticketing.core.domain.ticket.state.StateMachine;
@@ -75,6 +74,7 @@ public class Ticket extends PropertyMap<TicketProperty> {
     @Column(name = "order_channel_id")
     private Integer orderChannelId;
     @Getter
+    @Setter
     @Column(name = "ticket_kinship")
     private TicketKinship ticketKinship;
     @Getter
@@ -192,19 +192,5 @@ public class Ticket extends PropertyMap<TicketProperty> {
         }
 
         return isCancelled;
-    }
-
-    public void setTicketKinship(TicketIssuingType ticketIssuingType, boolean isBillingTicket) {
-        switch (ticketIssuingType) {
-            case ONE_TICKET_FOR_ALL_PRODUCTS:
-                this.ticketKinship = (isBillingTicket ? TicketKinship.Parent : TicketKinship.Child);
-                break;
-            case ONE_TICKET_PER_PRODUCT:
-                this.ticketKinship = (isBillingTicket ? TicketKinship.Hidden_Parent : TicketKinship.Parent);
-                break;
-            default:
-                this.ticketKinship = TicketKinship.None;
-                break;
-        }
     }
 }

@@ -3,7 +3,6 @@ package dk.unwire.ticketing.core.domain.application.service;
 import dk.unwire.ticketing.core.domain.application.exception.ApplicationNotFoundException;
 import dk.unwire.ticketing.core.domain.application.model.Application;
 import dk.unwire.ticketing.core.domain.application.repository.ApplicationRepository;
-import dk.unwire.ticketing.core.domain.application.service.ApplicationService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

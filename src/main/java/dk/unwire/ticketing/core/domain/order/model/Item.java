@@ -15,19 +15,8 @@ public class Item {
     private long id;
     @Getter
     @Column(name = "product_id")
-    private final long productId;
+    private int productId;
     @Getter
     @Column(name = "product_count")
-    private final int productCount;
-
-    private Item() {
-        this.productId = 0;
-        this.productCount = 0;
-
-    }
-
-    public Item(long productId, int productCount) {
-        this.productId = productId;
-        this.productCount = productCount;
-    }
+    private int productCount;
 }

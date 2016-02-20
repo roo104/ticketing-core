@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+
+    <persistence-unit name="NewPersistenceUnit">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>dk.unwire.ticketing.core.domain.product.model.Product</class>
+        <class>dk.unwire.ticketing.core.domain.product.model.ProductProperty</class>
+        <class>dk.unwire.ticketing.core.domain.product.model.ProductValidity</class>
+        <class>dk.unwire.ticketing.core.domain.product.model.TimePeriod</class>
+        <class>dk.unwire.ticketing.core.domain.application.model.Application</class>
+        <class>dk.unwire.ticketing.core.domain.application.model.ApplicationProperty</class>
+        <class>dk.unwire.ticketing.core.domain.systemproperty.model.SystemProperty</class>
+        <class>dk.unwire.ticketing.core.domain.product.model.Price</class>
+        <class>dk.unwire.ticketing.core.domain.application.model.Country</class>
+        <class>dk.unwire.ticketing.core.domain.order.model.payment.IntegratorProperty</class>
+        <class>dk.unwire.ticketing.core.domain.order.model.payment.CardProperty</class>
+        <class>dk.unwire.ticketing.core.domain.order.model.payment.VoucherProperty</class>
+        <class>dk.unwire.ticketing.core.domain.order.model.Order</class>
+        <class>dk.unwire.ticketing.core.domain.order.model.OrderProperty</class>
+        <class>dk.unwire.ticketing.core.domain.order.model.Item</class>
+        <class>dk.unwire.ticketing.core.domain.ticket.model.LogEntry</class>
+        <class>dk.unwire.ticketing.core.domain.ticket.model.Ticket</class>
+        <class>dk.unwire.ticketing.core.domain.ticket.model.TicketProperty</class>
+        <class>dk.unwire.ticketing.core.domain.ticket.model.TicketState</class>
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/mticket"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.username"/>
+            <property name="hibernate.connection.password"/>
+            <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hbm2ddl.auto" value="validate"/>
+        </properties>
+    </persistence-unit>
+</persistence>

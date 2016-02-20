@@ -1,8 +1,8 @@
 package dk.unwire.ticketing.core.domain.account.model;
 
-import com.unwire.mticket.util.collection.CollectionUtil;
 import dk.unwire.ticketing.spring.rest.common.header.MticketIdentifierType;
 import lombok.Getter;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.persistence.*;
 import java.time.ZoneOffset;
@@ -92,7 +92,7 @@ public final class Account {
 
     public AccountIdentifier getAccountIdentifier(MticketIdentifierType type) {
         AccountIdentifier accountIdentifier = null;
-        if (CollectionUtil.isNotEmpty(this.accountIdentifiers)) {
+        if (CollectionUtils.isNotEmpty(this.accountIdentifiers)) {
             for (AccountIdentifier identifier : this.accountIdentifiers) {
                 if (identifier.getAccount().getId() == this.id && identifier.getIdentifierType().equals(type)) {
                     accountIdentifier = identifier;

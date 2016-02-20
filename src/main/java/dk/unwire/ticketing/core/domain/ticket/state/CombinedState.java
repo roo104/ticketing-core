@@ -1,7 +1,7 @@
 package dk.unwire.ticketing.core.domain.ticket.state;
 
-import com.unwire.mticket.util.object.EqualsHelper;
-import com.unwire.mticket.util.object.HashCodeHelper;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public final class CombinedState {
 
@@ -36,21 +36,21 @@ public final class CombinedState {
 
         if (!isEqual && o instanceof CombinedState) {
             CombinedState that = (CombinedState) o;
-            EqualsHelper helper = new EqualsHelper();
+            EqualsBuilder helper = new EqualsBuilder();
             helper.append(this.transitionType, that.transitionType);
             helper.append(this.ticketStateType, that.ticketStateType);
             helper.append(this.transactionStateType, that.transactionStateType);
-            isEqual = helper.isEqual();
+            isEqual = helper.isEquals();
         }
         return isEqual;
     }
 
     @Override
     public int hashCode() {
-        HashCodeHelper helper = new HashCodeHelper();
+        HashCodeBuilder helper = new HashCodeBuilder();
         helper.append(this.transitionType);
         helper.append(this.ticketStateType);
         helper.append(this.transactionStateType);
-        return helper.hashCode();
+        return helper.toHashCode();
     }
 }

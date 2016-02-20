@@ -3,7 +3,6 @@ package dk.unwire.ticketing.core.domain.ticket.model;
 import dk.unwire.ticketing.core.domain.account.model.Account;
 import dk.unwire.ticketing.core.domain.account.model.FindOrCreateAccountVO;
 import dk.unwire.ticketing.core.domain.product.model.Product;
-import dk.unwire.ticketing.core.domain.ticket.model.factory.CreateTicketVO;
 import dk.unwire.ticketing.core.domain.ticket.model.factory.TicketFactory;
 import dk.unwire.ticketing.core.domain.ticket.model.vo.PaymentType;
 import dk.unwire.ticketing.core.domain.ticket.model.vo.TicketIssuingType;
@@ -46,12 +45,7 @@ public class TicketTest {
     @Test
     public void stateFromInitWithAuthFailToError() {
         // given a newly created ticket in initial state
-        CreateTicketVO createTicketVO = CreateTicketVO.newBuilder()
-                .ticketIssuingType(TicketIssuingType.ONE_TICKET_FOR_ALL_PRODUCTS)
-                .products(this.products)
-                .paymentType(PaymentType.NO_PAYMENT)
-                .account(this.account).build();
-        TicketOrder ticketOrder = this.ticketFactory.createTickets(createTicketVO);
+        TicketOrder ticketOrder = this.ticketFactory.createTickets(TicketIssuingType.ONE_TICKET_FOR_ALL_PRODUCTS, this.account, this.products, PaymentType.NO_PAYMENT);
         Ticket ticket = ticketOrder.getBillingTicket();
         assertTicketInState(ticket, TicketStateType.TICKET_ORDER_REQUEST_RECEIVED, TransactionStateType.TRANSACTION_NULL, 1);
 
@@ -121,12 +115,7 @@ public class TicketTest {
 
     private Ticket givenTicketInOrderedBilled() {
         // given ticket in state [8,2]
-        CreateTicketVO createTicketVO = CreateTicketVO.newBuilder()
-                .ticketIssuingType(TicketIssuingType.ONE_TICKET_FOR_ALL_PRODUCTS)
-                .products(this.products)
-                .paymentType(PaymentType.NO_PAYMENT)
-                .account(this.account).build();
-        TicketOrder ticketOrder = this.ticketFactory.createTickets(createTicketVO);
+        TicketOrder ticketOrder = this.ticketFactory.createTickets(TicketIssuingType.ONE_TICKET_FOR_ALL_PRODUCTS, this.account, this.products, PaymentType.NO_PAYMENT);
         Ticket ticket = ticketOrder.getBillingTicket();
         // [1,0] -> [8,0]
         ticket.nextStateOk();
