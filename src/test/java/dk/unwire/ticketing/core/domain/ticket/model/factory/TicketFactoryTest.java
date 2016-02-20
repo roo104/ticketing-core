@@ -31,6 +31,7 @@ public class TicketFactoryTest {
     Application application;
     Product product1;
     Product product2;
+    CreateTicketVO createTicketVO;
 
     @Before
     public void setup() {
@@ -40,6 +41,12 @@ public class TicketFactoryTest {
 
         this.product1 = Product.newBuilder().withName("test product1").withType("adult").withApplication(this.application).withPrice(1000, "0.00").build();
         this.product2 = Product.newBuilder().withName("test product2").withType("adult").withApplication(this.application).withPrice(2000, "0.00").build();
+
+        this.createTicketVO = CreateTicketVO.newBuilder()
+                .ticketIssuingType(TicketIssuingType.ONE_TICKET_FOR_ALL_PRODUCTS)
+                .products(this.products)
+                .paymentType(PaymentType.NO_PAYMENT)
+                .account(this.account).build();
     }
 
     @Test
@@ -47,31 +54,36 @@ public class TicketFactoryTest {
         // given a product
         this.products.add(this.product1);
 
-        // when building a ticket
-        TicketOrder ticketOrder = this.ticketFactory.createTickets(TicketIssuingType.ONE_TICKET_FOR_ALL_PRODUCTS, this.account, this.products, PaymentType.NO_PAYMENT);
+        // when creating a TicketOrder with one product
+        TicketOrder ticketOrder = this.ticketFactory.createTickets(this.createTicketVO);
 
-        // then one ticket should be returned
+        // then one billing- and no child tickets should be returned
         Ticket billingTicket = ticketOrder.getBillingTicket();
         assertEquals("Number of child tickets", 0, ticketOrder.getChildTickets().size());
-        assertEquals("Product price", this.product1.getPrice(), billingTicket.getTicketPrice().getPrice().intValue());
-        assertEquals("Kinship", TicketKinship.None, billingTicket.getTicketKinship());
+        assertBillingTicket(billingTicket, this.product1.getPrice());
 
+    }
+
+    private void assertBillingTicket(Ticket billingTicket, int expectedPrice) {
+        assertEquals("Product price", expectedPrice, billingTicket.getTicketPrice().getPrice().intValue());
+        assertEquals("Kinship", TicketKinship.Parent, billingTicket.getTicketKinship());
+        assertEquals("PaymentType", PaymentType.NO_PAYMENT, billingTicket.getTicketPrice().getPaymentType());
     }
 
     @Test
     public void createMultipleTickets_ONE_TICKET_FOR_ALL_PRODUCTS() throws Exception {
-        // given a product
+        // given a two products
         this.products.add(this.product1);
         this.products.add(this.product2);
 
-        // when building a ticket
-        TicketOrder ticketOrder = this.ticketFactory.createTickets(TicketIssuingType.ONE_TICKET_FOR_ALL_PRODUCTS, this.account, this.products, PaymentType.NO_PAYMENT);
+        // when creating a TicketOrder with two products
+        TicketOrder ticketOrder = this.ticketFactory.createTickets(this.createTicketVO);
 
-        // then one ticket should be returned
+        // then one billing- and one child ticket should be returned
         Ticket billingTicket = ticketOrder.getBillingTicket();
         assertEquals("Number of child tickets", 2, ticketOrder.getChildTickets().size());
-        assertEquals("Product price", this.product1.getPrice() + this.product2.getPrice(), billingTicket.getTicketPrice().getPrice().intValue());
-        assertEquals("ParentKinship", TicketKinship.Parent, billingTicket.getTicketKinship());
+        assertBillingTicket(billingTicket, this.product1.getPrice() + this.product2.getPrice());
+
         for (Ticket childTicket : ticketOrder.getChildTickets()) {
             assertEquals("Child Kinship", TicketKinship.Child, childTicket.getTicketKinship());
 

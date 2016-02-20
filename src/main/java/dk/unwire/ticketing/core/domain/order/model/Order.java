@@ -19,7 +19,7 @@ public class Order extends PropertyMap<OrderProperty> {
     private long id;
     @Getter
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private Collection<Item> items;
     @Getter
     @Embedded
@@ -29,8 +29,28 @@ public class Order extends PropertyMap<OrderProperty> {
     private String note;
     @Getter
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @JoinColumn(name = "id", referencedColumnName = "id")
     private Collection<OrderLog> orderLogs;
+
+    public String getRedirectUrl() {
+        return null;
+    }
+
+    public int getTotalAmount() {
+        return 0;
+    }
+
+    public void replaceItems(Collection<Item> items) {
+        this.items = items;
+    }
+
+    public void replacePayment(Payment payment) {
+        this.payment = payment;
+    }
+
+    public void updateNote(String note) {
+        this.note = note;
+    }
 
 
 }
